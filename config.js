@@ -27,7 +27,7 @@ const config = {
   'font_size': 15 * 2,
   'anti_aliassing': true,
   'mouse_sens': 0.15 * 2,
-  'font_path': 'fonts/cour.ttf',  // courbd not works, why??
+  'font_path': 'fonts/ascii.ttf',  // courbd not works, why??
   'disable_text_mode': false  // Perfomance, it's really bad now
 };
 
