@@ -21,6 +21,7 @@ const v86_config = {
   cdrom: {
     //url: "d:/Images/kolibri.iso"
   },
+  acpi: false,  // Set true for Windows 7
   autostart: true,
 };
 
