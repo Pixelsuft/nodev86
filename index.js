@@ -10,7 +10,10 @@ const {
 } = require('./config');
 const {
   number_as_color,
-  charmap
+  charmap,
+  closer_color_bg,
+  closer_color_fg,
+  set_cursor_pos,
 } = require('./screen_tools');
 const defines = require('./defines');
 const v86 = require('./build/libv86');
@@ -23,8 +26,12 @@ var last_cursor = [0, 0, 32, 0, 0];
 var vga_mode_size = [0, 0];
 var cursor_pos = [0, 0];
 var enable_cursor = false;
+var changed_rows = new Int8Array(25);
+var text_mode_data = new Int32Array(80 * 25 * 3);
+
 const mouse_sens = c['mouse_sens'];
-const disable_text_mode = c['disable_text_mode'];
+const disable_text_mode = !c['graphic_text_mode'];
+const use_console = c['console_text_mode'];
 const encoder = new TextEncoder();
 
 dll.init(
@@ -40,6 +47,8 @@ dll.init(
 const e = new v86.V86Starter(v86_c);
 
 e.bus.register("screen-clear", function() {
+  if (use_console)
+    process.stdout.write('\x1b[2J');
   dll.clear_screen();
 });
 e.bus.register("screen-set-mode", function(data) {
@@ -60,6 +69,13 @@ e.bus.register("screen-set-size-text", function(data) {
     return;
   text_mode_size[0] = data[0];
   text_mode_size[1] = data[1];
+  if (use_console) {
+    changed_rows = new Int8Array(data[1]);
+    text_mode_data = new Int32Array(data[0] * data[1] * 3);
+    for (var i = 0; i < data[1]; i++) {
+      text_update_row(i);
+    }
+  }
   dll.set_size_text(text_mode_size[0], text_mode_size[1]);
 });
 e.bus.register("screen-update-cursor", function(data) {
@@ -70,8 +86,9 @@ e.bus.register("screen-update-cursor", function(data) {
 e.bus.register("screen-update-cursor-scanline", function(data) {
   // TODO: Make Better
   if (data[0] & 0x20) {
-    cursor_pos[0] = 0;
-    cursor_pos[1] = 0;
+    enable_cursor = false;
+    //cursor_pos[0] = 0;
+    //cursor_pos[1] = 0;
     dll.screen_put_char(
       last_cursor[1],
       last_cursor[0],
@@ -79,15 +96,15 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
       new Uint8Array(number_as_color(last_cursor[3])),
       new Uint8Array(number_as_color(last_cursor[4]))
     );
-    enable_cursor = false;
-  }
-  else {
+  } else {
     enable_cursor = true;
   }
 });
 var skip_space = true;
 e.bus.register("screen-put-char", function(data) {
   // TODO: Do something with that
+  if (use_console)
+    console_put_char(data);
   if (disable_text_mode || (skip_space && data[2] == ' ')) // Temporary, we need to use changed_rows instead of this
     return;
   skip_space = false;
@@ -135,7 +152,61 @@ e.bus.register("screen-fill-buffer-end", function(data) {
   dll.flip_screen();
 });
 
+function console_put_char(data) {
+  if (data[0] < text_mode_size[1] && data[1] < text_mode_size[0]) {
+    const p = 3 * (data[0] * text_mode_size[0] + data[1]);
+
+    text_mode_data[p] = data[2];
+    text_mode_data[p + 1] = data[3];
+    text_mode_data[p + 2] = data[4];
+
+    changed_rows[data[0]] = 1;
+  }
+}
+
+function text_update_row(row) {
+  var offset = 3 * row * text_mode_size[0];
+
+  var bg_color,
+    fg_color,
+    text = set_cursor_pos(0, row + 1);
+
+  text += '\x1b[1m'; // Bright
+  
+  for (var i = 0; i < text_mode_size[0];) {
+    bg_color = text_mode_data[offset + 1];
+    fg_color = text_mode_data[offset + 2];
+    text += closer_color_bg(number_as_color(bg_color));
+    text += closer_color_fg(number_as_color(fg_color));
+
+    // put characters of the same color in one element
+    while (i < text_mode_size[0] &&
+      text_mode_data[offset + 1] === bg_color &&
+      text_mode_data[offset + 2] === fg_color) {
+
+      text += charmap[text_mode_data[offset]];
+
+      i++;
+      offset += 3;
+    }
+    closer_color_bg(number_as_color(bg_color));
+  }
+  text += set_cursor_pos(cursor_pos[1] + 1, cursor_pos[0] + 1);
+  process.stdout.write(text);
+};
+
+function update_text_rows() {
+  for (var i = 0; i < text_mode_size[1]; i++) {
+    if (changed_rows[i]) {
+      text_update_row(i);
+      changed_rows[i] = 0;
+    }
+  }
+}
+
 function update_text() {
+  if (use_console)
+    update_text_rows();
   dll.flip_screen();
   tick();
 }

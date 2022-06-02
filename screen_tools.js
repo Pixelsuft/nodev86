@@ -37,10 +37,52 @@ for (var i = 0; i < 256; i++) {
   }
 }
 
+const fg_colors = {
+  '000': '\x1b[30m',
+  '100': '\x1b[31m',
+  '010': '\x1b[32m',
+  '110': '\x1b[33m',
+  '001': '\x1b[34m',
+  '101': '\x1b[35m',
+  '011': '\x1b[36m',
+  '111': '\x1b[37m'
+};
+
+const bg_colors = {
+  '000': '\x1b[40m',
+  '100': '\x1b[41m',
+  '010': '\x1b[42m',
+  '110': '\x1b[43m',
+  '001': '\x1b[44m',
+  '101': '\x1b[45m',
+  '011': '\x1b[46m',
+  '111': '\x1b[47m'
+};
+
 const hex_to_rgb = hex =>
   hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => '#' + r + r + g + g + b + b)
   .substring(1).match(/.{2}/g)
   .map(x => parseInt(x, 16));
+
+function closer_color_bg(rgb) {
+  return bg_colors[[
+    Math.round(rgb[0] / 255),
+    Math.round(rgb[1] / 255),
+    Math.round(rgb[2] / 255)
+  ].join('')];
+}
+
+function closer_color_fg(rgb) {
+  return fg_colors[[
+    Math.round(rgb[0] / 255),
+    Math.round(rgb[1] / 255),
+    Math.round(rgb[2] / 255)
+  ].join('')];
+}
+
+function set_cursor_pos(x, y) {
+  return '\033[' + y + ';' + x + 'H';
+}
 
 function number_as_color(n) {
   n = n.toString(16);
@@ -49,3 +91,6 @@ function number_as_color(n) {
 
 exports.charmap = charmap;
 exports.number_as_color = number_as_color;
+exports.closer_color_bg = closer_color_bg;
+exports.closer_color_fg = closer_color_fg;
+exports.set_cursor_pos = set_cursor_pos;

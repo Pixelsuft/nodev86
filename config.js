@@ -11,12 +11,15 @@ const v86_config = {
   hda: {
     //url: "d:/freebsd.img",
     //async: true,
-    //url: "d:/dos.img",
+    url: "d:/msdos.img",
     //url: "d:/copy_winnt.img",
-    url: "d:/windows31.img",
+    //url: "d:/windows31.img",
   },
   fda: {
     //url: "d:/images/kolibri.img",
+  },
+  cdrom: {
+    //url: "d:/Images/kolibri.iso"
   },
   autostart: true,
 };
@@ -28,7 +31,8 @@ const config = {
   'anti_aliassing': true,
   'mouse_sens': 0.15 * 2,
   'font_path': 'fonts/ascii.ttf',  // courbd not works, why??
-  'disable_text_mode': false  // Perfomance, it's really bad now
+  'graphic_text_mode': false,  // Perfomance, it's really bad now
+  'console_text_mode': true  // Better???
 };
 
 // TODO: Parse Configs
