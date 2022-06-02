@@ -48,7 +48,7 @@ const e = new v86.V86Starter(v86_c);
 
 e.bus.register("screen-clear", function() {
   if (use_console)
-    process.stdout.write('\x1b[2J');
+    process.stdout.write('\x1b[2J' + set_cursor_pos(cursor_pos[1] + 1, cursor_pos[0] + 1));
   dll.clear_screen();
 });
 e.bus.register("screen-set-mode", function(data) {
@@ -82,6 +82,8 @@ e.bus.register("screen-update-cursor", function(data) {
   // TODO: Make Better
   cursor_pos[0] = data[0];
   cursor_pos[1] = data[1];
+  if (use_console)
+    process.stdout.write(set_cursor_pos(cursor_pos[1] + 1, cursor_pos[0] + 1));
 });
 e.bus.register("screen-update-cursor-scanline", function(data) {
   // TODO: Make Better
