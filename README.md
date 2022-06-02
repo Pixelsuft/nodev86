@@ -7,7 +7,8 @@ v86 on nodejs + sdl2
 (Yes, I switched to Windows 11) <br />
 ![4](https://user-images.githubusercontent.com/68371847/171554543-8dbbd2e4-f789-488d-84d4-2ab676ba4ab8.png) <br />
 ![5](https://user-images.githubusercontent.com/68371847/171554546-c6b03335-2a04-4360-b431-4ffade1c5eae.png) <br />
-![6](https://user-images.githubusercontent.com/68371847/171554549-590c8cd2-45de-4c88-b510-bdc359052068.png)
+![6](https://user-images.githubusercontent.com/68371847/171554549-590c8cd2-45de-4c88-b510-bdc359052068.png) <br />
+![7](https://user-images.githubusercontent.com/68371847/171556875-3d228a0f-d213-494a-8771-9f4972517fb5.png)
 # Building and Running
 Note: To build on windows, use mingw64 (use `--mingw` flag) or msys2 <br />
 1) Build .dll/.so library using build.py script in src folder <br />
