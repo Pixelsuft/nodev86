@@ -172,6 +172,8 @@ V86_API void init(
 ) {
   char_size[0] = _char_size_x;
   char_size[1] = _char_size_y;
+  screen_size[0] = char_count[0] * char_size[0];
+  screen_size[1] = char_count[1] * char_size[1];
   font_size = _font_size;
   anti_aliassing = _anti_aliassing;
   SDL_Init(SDL_INIT_VIDEO);

@@ -87,8 +87,8 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
   // TODO: Make Better
   if (data[0] & 0x20) {
     enable_cursor = false;
-    //cursor_pos[0] = 0;
-    //cursor_pos[1] = 0;
+    cursor_pos[0] = 0;
+    cursor_pos[1] = 0;
     dll.screen_put_char(
       last_cursor[1],
       last_cursor[0],
@@ -172,7 +172,7 @@ function text_update_row(row) {
     text = set_cursor_pos(0, row + 1);
 
   text += '\x1b[1m'; // Bright
-  
+
   for (var i = 0; i < text_mode_size[0];) {
     bg_color = text_mode_data[offset + 1];
     fg_color = text_mode_data[offset + 2];
