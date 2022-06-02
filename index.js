@@ -32,6 +32,7 @@ var text_mode_data = new Int32Array(80 * 25 * 3);
 const mouse_sens = c['mouse_sens'];
 const disable_text_mode = !c['graphic_text_mode'];
 const use_console = c['console_text_mode'];
+const bright_font = c['font_bright'];
 const encoder = new TextEncoder();
 
 dll.init(
@@ -172,8 +173,8 @@ function text_update_row(row) {
   var bg_color,
     fg_color,
     text = set_cursor_pos(0, row + 1);
-
-  text += '\x1b[1m'; // Bright
+  if (bright_font)
+    text += '\x1b[1m';
 
   for (var i = 0; i < text_mode_size[0];) {
     bg_color = text_mode_data[offset + 1];
