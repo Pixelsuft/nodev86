@@ -23,6 +23,7 @@ const v86_config = {
   },
   acpi: false,  // Set true for Windows 7
   autostart: true,
+  boot_order: 0x132
 };
 
 const config = {
@@ -33,7 +34,7 @@ const config = {
   'anti_aliassing': true,
   'mouse_sens': 0.15 * 2,
   'font_path': 'fonts/ascii.ttf',  // courbd not works, why??
-  'graphic_text_mode': false,  // Perfomance, it's really bad now
+  'graphic_text_mode': true,  // Perfomance, it's really bad now
   'console_text_mode': true  // Better???
 };
 

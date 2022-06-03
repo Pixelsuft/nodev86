@@ -91,10 +91,10 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
   // TODO: Make Better
   if (data[0] & 0x20) {
     enable_cursor = false;
-    if (disable_text_mode) {
+    if (use_console) {
       cursor_pos[0] = -1;
       cursor_pos[1] = -1;
-    } else {
+    } else if(disable_text_mode) {
       cursor_pos[0] = 0;
       cursor_pos[1] = 0;
       dll.screen_put_char(
