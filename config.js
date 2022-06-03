@@ -22,12 +22,13 @@ const v86_config = {
     //url: "d:/Images/kolibri.iso"
   },
   acpi: false,  // Set true for Windows 7
-  autostart: true,
+  autostart: false,
   boot_order: 0x132
 };
 
 const config = {
   'hardware_accel': true,
+  'timeout': 1000,
   'char_size': [9, 16],
   'font_size': 15,
   'font_bright': process.platform == 'win32',

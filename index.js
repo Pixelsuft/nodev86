@@ -266,5 +266,9 @@ function tick() {
   }
   setImmediate(is_graphical ? update_graphical : update_text);
 }
-dll.clear_screen();
-tick();
+
+setTimeout(function() {
+  e.bus.send("cpu-run");
+  dll.clear_screen();
+  tick();
+}, c['timeout']);
