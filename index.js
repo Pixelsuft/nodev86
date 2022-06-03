@@ -22,7 +22,6 @@ global.ImageData = ImageData;
 
 var is_graphical = false;
 var text_mode_size = [80, 25];
-var last_cursor = [0, 0, 32, 0, 0];
 var vga_mode_size = [0, 0];
 var cursor_pos = [0, 0];
 var enable_cursor = false;
@@ -30,7 +29,7 @@ var changed_rows = new Int8Array(25);
 var text_mode_data = new Int32Array(80 * 25 * 3);
 
 const mouse_sens = c['mouse_sens'];
-const disable_text_mode = !c['graphic_text_mode'];
+const text_mode = c['graphic_text_mode'];
 const use_console = c['console_text_mode'];
 const bright_font = c['font_bright'];
 const encoder = new TextEncoder();
@@ -42,7 +41,7 @@ dll.init(
   c['vsync'],
   c['hardware_accel'],
   c['anti_aliassing'],
-  !disable_text_mode,
+  text_mode,
   encoder.encode(c['font_path'])
 );
 
@@ -71,12 +70,11 @@ e.bus.register("screen-set-size-text", function(data) {
     return;
   text_mode_size[0] = data[0];
   text_mode_size[1] = data[1];
-  if (use_console) {
-    changed_rows = new Int8Array(data[1]);
-    text_mode_data = new Int32Array(data[0] * data[1] * 3);
-    for (var i = 0; i < data[1]; i++) {
-      text_update_row(i);
-    }
+  changed_rows = new Int8Array(data[1]);
+  text_mode_data = new Int32Array(data[0] * data[1] * 3);
+  for (var i = 0; i < data[1]; i++) {
+    if (use_console) console_text_update_row(i);
+    if (text_mode) text_update_row(i);
   }
   dll.set_size_text(text_mode_size[0], text_mode_size[1]);
 });
@@ -94,16 +92,9 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
     if (use_console) {
       cursor_pos[0] = -1;
       cursor_pos[1] = -1;
-    } else if(!disable_text_mode) {
+    } else if (text_mode) {
       cursor_pos[0] = 0;
       cursor_pos[1] = 0;
-      dll.screen_put_char(
-        last_cursor[1],
-        last_cursor[0],
-        last_cursor[2],
-        new Uint8Array(number_as_color(last_cursor[3])),
-        new Uint8Array(number_as_color(last_cursor[4]))
-      );
     }
   } else {
     enable_cursor = true;
@@ -111,41 +102,7 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
 });
 var skip_space = true;
 e.bus.register("screen-put-char", function(data) {
-  if (use_console)
-    console_put_char(data);
-  // TODO: Do something with that
-  if (disable_text_mode || (skip_space && data[2] == ' ')) // Temporary, we need to use changed_rows instead of this
-    return;
-  skip_space = false;
-  if (enable_cursor && data[0] == cursor_pos[0] && data[1] == cursor_pos[1]) {
-    dll.screen_put_char(
-      last_cursor[1],
-      last_cursor[0],
-      last_cursor[2],
-      new Uint8Array(number_as_color(last_cursor[3])),
-      new Uint8Array(number_as_color(last_cursor[4]))
-    );
-    dll.screen_put_char(
-      data[1],
-      data[0],
-      data[2],
-      new Uint8Array(number_as_color(data[4])),
-      new Uint8Array(number_as_color(data[3]))
-    );
-    last_cursor[0] = data[0];
-    last_cursor[1] = data[1];
-    last_cursor[2] = data[2];
-    last_cursor[3] = data[3];
-    last_cursor[4] = data[4];
-    return;
-  }
-  dll.screen_put_char(
-    data[1],
-    data[0],
-    data[2],
-    new Uint8Array(number_as_color(data[3])),
-    new Uint8Array(number_as_color(data[4]))
-  );
+  put_char(data);
 });
 e.bus.register("screen-fill-buffer-end", function(data) {
   // dll.clear_screen();
@@ -161,7 +118,7 @@ e.bus.register("screen-fill-buffer-end", function(data) {
   dll.flip_screen();
 });
 
-function console_put_char(data) {
+function put_char(data) {
   if (data[0] < text_mode_size[1] && data[1] < text_mode_size[0]) {
     const p = 3 * (data[0] * text_mode_size[0] + data[1]);
 
@@ -173,7 +130,7 @@ function console_put_char(data) {
   }
 }
 
-function text_update_row(row) {
+function console_text_update_row(row) {
   var offset = 3 * row * text_mode_size[0];
 
   var bg_color,
@@ -204,18 +161,61 @@ function text_update_row(row) {
   process.stdout.write(text);
 };
 
+function text_update_row(row) {
+  var offset = 3 * row * text_mode_size[0];
+
+  var bg_color,
+    fg_color,
+    text;
+
+  for (var i = 0; i < text_mode_size[0];) {
+    bg_color = text_mode_data[offset + 1];
+    fg_color = text_mode_data[offset + 2];
+
+    text = "";
+
+    while (i < text_mode_size[0] &&
+      text_mode_data[offset + 1] == bg_color &&
+      text_mode_data[offset + 2] == fg_color) {
+      var ascii = text_mode_data[offset];
+
+      text += ascii > 127 ? ' ' : charmap[ascii];
+
+      i++;
+      offset += 3;
+
+      /*if (row == cursor_pos[1]) {
+        if (i == cursor_pos[0]) {
+          break;
+        } else if (i == cursor_pos[0] + 1) {
+          break;
+        }
+      }*/
+    }
+
+    dll.screen_put_char(
+      i - text.length,
+      row,
+      text.length,
+      encoder.encode(text + '\x00'),
+      new Uint8Array(number_as_color(bg_color)),
+      new Uint8Array(number_as_color(fg_color))
+    );
+  }
+}
+
 function update_text_rows() {
   for (var i = 0; i < text_mode_size[1]; i++) {
     if (changed_rows[i]) {
-      text_update_row(i);
+      if (use_console) console_text_update_row(i);
+      if (text_mode) text_update_row(i);
       changed_rows[i] = 0;
     }
   }
 }
 
 function update_text() {
-  if (use_console)
-    update_text_rows();
+  update_text_rows();
   dll.flip_screen();
   tick();
 }

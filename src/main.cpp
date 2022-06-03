@@ -232,21 +232,19 @@ V86_API void set_size_graphical(int _width, int _height) {
   update_title();
 }
 
-V86_API void screen_put_char(int _x, int _y, int _char, uint8_t* _bg, uint8_t* _fg) {
+V86_API void screen_put_char(int _x, int _y, int _w, char* _char, uint8_t* _bg, uint8_t* _fg) {
   SDL_Rect _rect = {
     _x * char_size[0],
     _y * char_size[1],
-    char_size[0],
+    char_size[0] * _w,
     char_size[1]
   };
   SDL_SetRenderDrawColor(renderer, _bg[0], _bg[1], _bg[2], 255);
   SDL_RenderFillRect(renderer, &_rect);
   // TODO: I hate C++ with Unicode
-  if (_char == 32 || _char > 127)  // Don't render unicode
-    return;
-  SDL_Surface* _surf = (anti_aliassing ? TTF_RenderGlyph_Blended : TTF_RenderGlyph_Solid)(
+  SDL_Surface* _surf = (anti_aliassing ? TTF_RenderText_Blended : TTF_RenderText_Solid)(
     font,
-    (char)charmap[_char],
+    _char,
     { _fg[0], _fg[1], _fg[2] }
   );
   SDL_Texture* _tex = SDL_CreateTextureFromSurface(renderer, _surf);

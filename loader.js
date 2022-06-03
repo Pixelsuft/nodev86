@@ -20,7 +20,7 @@ const dll = ffi.Library(
     'poll_wheel': ['int', []],
     'set_graphical': ['void', ['bool']],
     'set_size_graphical': ['void', ['int', 'int']],
-    'screen_put_char': ['void', ['int', 'int', 'int', 'Uint8*', 'Uint8*']],
+    'screen_put_char': ['void', ['int', 'int', 'int', 'char*', 'Uint8*', 'Uint8*']],
     'screen_graphic_output': ['void', ['char*', 'int', 'int', 'int', 'int']],
     'set_size_text': ['void', ['int', 'int']],
     'poll_events': ['int', []]
