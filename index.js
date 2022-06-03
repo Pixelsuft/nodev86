@@ -267,7 +267,5 @@ function tick() {
   setImmediate(is_graphical ? update_graphical : update_text);
 }
 
-setTimeout(function() {
-  dll.clear_screen();
-  tick();
-}, c['timeout']);
+dll.clear_screen();
+tick();
