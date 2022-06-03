@@ -94,7 +94,7 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
     if (use_console) {
       cursor_pos[0] = -1;
       cursor_pos[1] = -1;
-    } else if(disable_text_mode) {
+    } else if(!disable_text_mode) {
       cursor_pos[0] = 0;
       cursor_pos[1] = 0;
       dll.screen_put_char(
