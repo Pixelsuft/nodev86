@@ -268,7 +268,6 @@ function tick() {
 }
 
 setTimeout(function() {
-  e.bus.send("cpu-run");
   dll.clear_screen();
   tick();
 }, c['timeout']);

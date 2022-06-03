@@ -252,7 +252,6 @@ V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg
   };
   SDL_SetRenderDrawColor(renderer, _bg[0], _bg[1], _bg[2], 255);
   SDL_RenderFillRect(renderer, &_rect);
-  // TODO: I hate C++ with Unicode
   SDL_Surface* _surf = (anti_aliassing ? TTF_RenderUNICODE_Blended : TTF_RenderUNICODE_Solid)(
     font,
     _char,
