@@ -27,8 +27,8 @@ const v86_config = {
 
 const config = {
   'hardware_accel': true,
-  'char_size': [9 * 2, 16 * 2],
-  'font_size': 15 * 2,
+  'char_size': [9, 16],
+  'font_size': 15,
   'font_bright': process.platform == 'win32',
   'anti_aliassing': true,
   'mouse_sens': 0.15 * 2,
