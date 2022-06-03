@@ -9,7 +9,7 @@ if (process.platform == 'win32') {
 }
 const dll = ffi.Library(
   path.join(__dirname, 'external', 'nodev86.' + file_ext), {
-    'init': ['void', ['int', 'int', 'int', 'bool', 'bool', 'bool', 'char*']],
+    'init': ['void', ['int', 'int', 'int', 'bool', 'bool', 'bool', 'bool', 'char*']],
     'destroy': ['void', []],
     'flip_screen': ['void', []],
     'clear_screen': ['void', []],

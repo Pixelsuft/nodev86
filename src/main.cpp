@@ -168,6 +168,7 @@ V86_API void init(
   bool _vsync,
   bool _hardware_accel,
   bool _anti_aliassing,
+  bool _load_font,
   char* _font_path
 ) {
   char_size[0] = _char_size_x;
@@ -177,8 +178,10 @@ V86_API void init(
   font_size = _font_size;
   anti_aliassing = _anti_aliassing;
   SDL_Init(SDL_INIT_VIDEO);
-  TTF_Init();
-  font = TTF_OpenFont(_font_path, font_size);
+  if (_load_font) {
+    TTF_Init();
+    font = TTF_OpenFont(_font_path, font_size);
+  }
   SDL_WindowFlags window_flags = SDL_WINDOW_ALLOW_HIGHDPI;
   Uint32 renderer_flags = 0;
   if (_vsync) renderer_flags |= SDL_RENDERER_PRESENTVSYNC;

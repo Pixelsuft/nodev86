@@ -42,6 +42,7 @@ dll.init(
   c['vsync'],
   c['hardware_accel'],
   c['anti_aliassing'],
+  !disable_text_mode,
   encoder.encode(c['font_path'])
 );
 
