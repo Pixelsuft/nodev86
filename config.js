@@ -35,7 +35,7 @@ const config = {
   'mouse_sens': 0.15 * 2,
   'font_path': 'fonts/liberationmonob.ttf', // ascii.ttf not works with unicode
   'graphic_text_mode': true,
-  'console_text_mode': true  // Better???
+  'console_text_mode': true
 };
 
 // TODO: Parse Configs
