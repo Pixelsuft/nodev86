@@ -24,10 +24,13 @@ var is_graphical = false;
 var text_mode_size = [80, 25];
 var vga_mode_size = [0, 0];
 var cursor_pos = [0, 0];
-var enable_cursor = false;
+var enable_cursor = true;
 var changed_rows = new Int8Array(25);
 var text_mode_data = new Int32Array(80 * 25 * 3);
+var cursor_height = 1;
+var cursor_color = new Uint8Array([0xCC, 0xCC, 0xCC]);
 
+const char_size = c['char_size'];
 const mouse_sens = c['mouse_sens'];
 const text_mode = c['graphic_text_mode'];
 const use_console = c['console_text_mode'];
@@ -35,8 +38,8 @@ const bright_font = c['font_bright'];
 const encoder = new TextEncoder();
 
 dll.init(
-  c['char_size'][0],
-  c['char_size'][1],
+  char_size[0],
+  char_size[1],
   c['font_size'],
   c['vsync'],
   c['hardware_accel'],
@@ -79,25 +82,34 @@ e.bus.register("screen-set-size-text", function(data) {
   dll.set_size_text(text_mode_size[0], text_mode_size[1]);
 });
 e.bus.register("screen-update-cursor", function(data) {
-  // TODO: Make Better
+  if (data[0] == cursor_pos[0] && data[1] == cursor_pos[1]) {
+    return;
+  }
+  if (text_mode) {
+    changed_rows[cursor_pos[0]] = true;
+    changed_rows[data[0]] = true;
+  }
   cursor_pos[0] = data[0];
   cursor_pos[1] = data[1];
   if (use_console)
     process.stdout.write(set_cursor_pos(cursor_pos[1] + 1, cursor_pos[0] + 1));
 });
 e.bus.register("screen-update-cursor-scanline", function(data) {
-  // TODO: Make Better
   if (data[0] & 0x20) {
-    enable_cursor = false;
-    if (use_console) {
-      cursor_pos[0] = -1;
-      cursor_pos[1] = -1;
-    } else if (text_mode) {
-      cursor_pos[0] = 0;
-      cursor_pos[1] = 0;
+    enable_cursor = true;
+    if (text_mode) {
+      changed_rows[cursor_pos[0]] = true;
+      changed_rows[0] = true;
     }
+    cursor_pos[0] = 0;
+    cursor_pos[1] = 0;
   } else {
     enable_cursor = true;
+    cursor_height = data[1] - data[0];
+    if (text_mode) {
+      changed_rows[cursor_pos[0]] = true;
+      changed_rows[0] = true;
+    }
   }
 });
 var skip_space = true;
@@ -145,7 +157,6 @@ function console_text_update_row(row) {
     text += closer_color_bg(number_as_color(bg_color));
     text += closer_color_fg(number_as_color(fg_color));
 
-    // put characters of the same color in one element
     while (i < text_mode_size[0] &&
       text_mode_data[offset + 1] === bg_color &&
       text_mode_data[offset + 2] === fg_color) {
@@ -179,18 +190,10 @@ function text_update_row(row) {
       text_mode_data[offset + 2] == fg_color) {
       var ascii = text_mode_data[offset];
 
-      text += ascii > 127 ? ' ' : charmap[ascii];
+      text += ascii > 127 ? ' ' : charmap[ascii];  // I hate unicode in C++
 
       i++;
       offset += 3;
-
-      /*if (row == cursor_pos[1]) {
-        if (i == cursor_pos[0]) {
-          break;
-        } else if (i == cursor_pos[0] + 1) {
-          break;
-        }
-      }*/
     }
 
     dll.screen_put_char(
@@ -208,7 +211,17 @@ function update_text_rows() {
   for (var i = 0; i < text_mode_size[1]; i++) {
     if (changed_rows[i]) {
       if (use_console) console_text_update_row(i);
-      if (text_mode) text_update_row(i);
+      if (text_mode) {
+        text_update_row(i);
+        if (enable_cursor && i == cursor_pos[0]) {
+          dll.screen_draw_cursor(
+            cursor_pos[1],
+            cursor_pos[0] + 1,
+            cursor_height,
+            cursor_color
+          );
+        }
+      }
       changed_rows[i] = 0;
     }
   }

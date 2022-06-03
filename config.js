@@ -33,8 +33,8 @@ const config = {
   'font_bright': process.platform == 'win32',
   'anti_aliassing': true,
   'mouse_sens': 0.15 * 2,
-  'font_path': 'fonts/ascii.ttf',  // courbd not works, why??
-  'graphic_text_mode': true,  // Perfomance, it's really bad now
+  'font_path': 'fonts/ascii.ttf',
+  'graphic_text_mode': true,
   'console_text_mode': true  // Better???
 };
 

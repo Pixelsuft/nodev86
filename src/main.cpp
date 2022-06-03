@@ -178,6 +178,7 @@ V86_API void init(
   font_size = _font_size;
   anti_aliassing = _anti_aliassing;
   SDL_Init(SDL_INIT_VIDEO);
+  _load_font = true;  // Random Fix
   if (_load_font) {
     TTF_Init();
     font = TTF_OpenFont(_font_path, font_size);
@@ -230,6 +231,17 @@ V86_API void set_size_graphical(int _width, int _height) {
   screen_size[1] = _height;
   SDL_SetWindowSize(window, _width, _height);
   update_title();
+}
+
+V86_API void screen_draw_cursor(int _x, int _y, int _h, uint8_t* _bg) {
+  SDL_Rect _rect = {
+    _x * char_size[0],
+    _y * char_size[1] - _h,
+    char_size[0],
+    _h
+  };
+  SDL_SetRenderDrawColor(renderer, _bg[0], _bg[1], _bg[2], 255);
+  SDL_RenderFillRect(renderer, &_rect);
 }
 
 V86_API void screen_put_char(int _x, int _y, int _w, char* _char, uint8_t* _bg, uint8_t* _fg) {
