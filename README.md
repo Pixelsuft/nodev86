@@ -16,3 +16,5 @@ Note: To build on windows, use mingw64 (use `--mingw` flag) or msys2 <br />
 2) Install nodejs packages with `npm i` <br />
 3) Configure `config.js` <br />
 4) Run with `npm start` or `node index`
+# TODO
+1) Fix graphical text mode randomly not working

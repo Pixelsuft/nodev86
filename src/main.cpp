@@ -178,7 +178,6 @@ V86_API void init(
   font_size = _font_size;
   anti_aliassing = _anti_aliassing;
   SDL_Init(SDL_INIT_VIDEO);
-  _load_font = true;  // Random Fix
   if (_load_font) {
     TTF_Init();
     font = TTF_OpenFont(_font_path, font_size);
