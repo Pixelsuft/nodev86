@@ -28,12 +28,12 @@ const v86_config = {
 
 const config = {
   'hardware_accel': true,
-  'char_size': [9, 16],
-  'font_size': 15,
+  'char_size': [9 * 2, 16 * 2],
+  'font_size': 15 * 2,
   'font_bright': process.platform == 'win32',
   'anti_aliassing': true,
   'mouse_sens': 0.15 * 2,
-  'font_path': 'fonts/ascii.ttf',
+  'font_path': 'fonts/cour.ttf', // ascii.ttf not works with unicode
   'graphic_text_mode': true,
   'console_text_mode': true  // Better???
 };

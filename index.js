@@ -21,6 +21,13 @@ const v86 = require('./build/libv86');
 
 global.ImageData = ImageData;
 
+const char_size = c['char_size'];
+const mouse_sens = c['mouse_sens'];
+const text_mode = c['graphic_text_mode'];
+const use_console = c['console_text_mode'];
+const bright_font = c['font_bright'];
+const encoder = new TextEncoder();
+
 var is_graphical = false;
 var text_mode_size = [80, 25];
 var vga_mode_size = [0, 0];
@@ -28,15 +35,8 @@ var cursor_pos = [-1, -1];
 var enable_cursor = false;
 var changed_rows = new Int8Array(25);
 var text_mode_data = new Int32Array(80 * 25 * 3);
-var cursor_height = 1;
+var cursor_height = Math.floor(char_size[1] / 16);
 var cursor_color = new Uint8Array([0xCC, 0xCC, 0xCC]);
-
-const char_size = c['char_size'];
-const mouse_sens = c['mouse_sens'];
-const text_mode = c['graphic_text_mode'];
-const use_console = c['console_text_mode'];
-const bright_font = c['font_bright'];
-const encoder = new TextEncoder();
 
 dll.init(
   char_size[0],
@@ -106,7 +106,7 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
     cursor_pos[1] = -1;
   } else {
     enable_cursor = true;
-    cursor_height = data[1] - data[0];
+    cursor_height = Math.floor((data[1] - data[0]) * char_size[1] / 16);
     if (text_mode) {
       changed_rows[cursor_pos[0]] = true;
       changed_rows[0] = true;
@@ -191,7 +191,7 @@ function text_update_row(row) {
       text_mode_data[offset + 2] == fg_color) {
       var ascii = text_mode_data[offset];
 
-      text += ascii > 127 ? ' ' : charmap[ascii];  // I hate unicode in C++
+      text += charmap[ascii];
 
       i++;
       offset += 3;
@@ -201,7 +201,7 @@ function text_update_row(row) {
       i - text.length,
       row,
       text.length,
-      encoder.encode(text + '\x00'),
+      str_to_utf16(text + '\x00'),
       new Uint8Array(number_as_color(bg_color)),
       new Uint8Array(number_as_color(fg_color))
     );

@@ -21,7 +21,7 @@ const dll = ffi.Library(
     'set_graphical': ['void', ['bool']],
     'set_size_graphical': ['void', ['int', 'int']],
     'screen_draw_cursor': ['void', ['int', 'int', 'int', 'Uint8*']],
-    'screen_put_char': ['void', ['int', 'int', 'int', 'char*', 'Uint8*', 'Uint8*']],
+    'screen_put_char': ['void', ['int', 'int', 'int', 'Uint16*', 'Uint8*', 'Uint8*']],
     'screen_graphic_output': ['void', ['char*', 'int', 'int', 'int', 'int']],
     'set_size_text': ['void', ['int', 'int']],
     'poll_events': ['int', []]
