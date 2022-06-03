@@ -13,7 +13,7 @@ const {
   charmap,
   closer_color_bg,
   closer_color_fg,
-  set_cursor_pos,
+  set_cursor_pos
 } = require('./screen_tools');
 const defines = require('./defines');
 const v86 = require('./build/libv86');
@@ -90,24 +90,29 @@ e.bus.register("screen-update-cursor-scanline", function(data) {
   // TODO: Make Better
   if (data[0] & 0x20) {
     enable_cursor = false;
-    cursor_pos[0] = 0;
-    cursor_pos[1] = 0;
-    dll.screen_put_char(
-      last_cursor[1],
-      last_cursor[0],
-      last_cursor[2],
-      new Uint8Array(number_as_color(last_cursor[3])),
-      new Uint8Array(number_as_color(last_cursor[4]))
-    );
+    if (disable_text_mode) {
+      cursor_pos[0] = -1;
+      cursor_pos[1] = -1;
+    } else {
+      cursor_pos[0] = 0;
+      cursor_pos[1] = 0;
+      dll.screen_put_char(
+        last_cursor[1],
+        last_cursor[0],
+        last_cursor[2],
+        new Uint8Array(number_as_color(last_cursor[3])),
+        new Uint8Array(number_as_color(last_cursor[4]))
+      );
+    }
   } else {
     enable_cursor = true;
   }
 });
 var skip_space = true;
 e.bus.register("screen-put-char", function(data) {
-  // TODO: Do something with that
   if (use_console)
     console_put_char(data);
+  // TODO: Do something with that
   if (disable_text_mode || (skip_space && data[2] == ' ')) // Temporary, we need to use changed_rows instead of this
     return;
   skip_space = false;
