@@ -23,8 +23,8 @@ global.ImageData = ImageData;
 var is_graphical = false;
 var text_mode_size = [80, 25];
 var vga_mode_size = [0, 0];
-var cursor_pos = [0, 0];
-var enable_cursor = true;
+var cursor_pos = [-1, -1];
+var enable_cursor = false;
 var changed_rows = new Int8Array(25);
 var text_mode_data = new Int32Array(80 * 25 * 3);
 var cursor_height = 1;
@@ -96,13 +96,13 @@ e.bus.register("screen-update-cursor", function(data) {
 });
 e.bus.register("screen-update-cursor-scanline", function(data) {
   if (data[0] & 0x20) {
-    enable_cursor = true;
+    enable_cursor = false;
     if (text_mode) {
       changed_rows[cursor_pos[0]] = true;
       changed_rows[0] = true;
     }
-    cursor_pos[0] = 0;
-    cursor_pos[1] = 0;
+    cursor_pos[0] = -1;
+    cursor_pos[1] = -1;
   } else {
     enable_cursor = true;
     cursor_height = data[1] - data[0];
