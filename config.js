@@ -3,10 +3,10 @@ const v86_config = {
   memory_size: 16 * 1024 * 1024,
   vga_memory_size: 4 * 1024 * 1024,
   bios: {
-    url: "./bios/seabios.bin",
+    url: "./bios/bochs-bios.bin",
   },
   vga_bios: {
-    url: "./bios/vgabios.bin",
+    url: "./bios/bochs-vgabios.bin",
   },
   hda: {
     //url: "d:/freebsd.img",
