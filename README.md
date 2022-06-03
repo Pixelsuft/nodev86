@@ -8,8 +8,9 @@ v86 on nodejs + sdl2
 ![4](https://user-images.githubusercontent.com/68371847/171554543-8dbbd2e4-f789-488d-84d4-2ab676ba4ab8.png) <br />
 ![5](https://user-images.githubusercontent.com/68371847/171554546-c6b03335-2a04-4360-b431-4ffade1c5eae.png) <br />
 ![6](https://user-images.githubusercontent.com/68371847/171554549-590c8cd2-45de-4c88-b510-bdc359052068.png) <br />
-![7](https://user-images.githubusercontent.com/68371847/171556875-3d228a0f-d213-494a-8771-9f4972517fb5.png) <br />
-![8](https://user-images.githubusercontent.com/68371847/171573355-ded15c49-d23b-4867-88a8-a25f6a05afe5.png)
+![7](https://user-images.githubusercontent.com/68371847/171852149-0440a978-a5dd-4bb7-b4d5-34b723d4d50e.png) <br />
+![8](https://user-images.githubusercontent.com/68371847/171556875-3d228a0f-d213-494a-8771-9f4972517fb5.png) <br />
+![9](https://user-images.githubusercontent.com/68371847/171573355-ded15c49-d23b-4867-88a8-a25f6a05afe5.png)
 # Building and Running
 Note: To build on windows, use mingw64 (use `--mingw` flag) or msys2 <br />
 1) Build .dll/.so library using `build.py` script in src folder <br />
