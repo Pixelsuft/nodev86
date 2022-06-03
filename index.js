@@ -13,7 +13,8 @@ const {
   charmap,
   closer_color_bg,
   closer_color_fg,
-  set_cursor_pos
+  set_cursor_pos,
+  str_to_utf16
 } = require('./screen_tools');
 const defines = require('./defines');
 const v86 = require('./build/libv86');
