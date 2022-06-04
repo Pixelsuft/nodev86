@@ -39,6 +39,7 @@ const char_size = c['char_size'];
 const mouse_sens = c['mouse_sens'];
 const text_mode = c['graphic_text_mode'];
 const use_console = c['console_text_mode'];
+const use_serial = c['console_serial_mode'];
 const encoder = new TextEncoder();
 
 var is_graphical = false;
@@ -150,6 +151,17 @@ e.add_listener("ide-read-start", function() {
 e.add_listener("ide-read-end", function() {
   dll.set_loading(false);
 });
+if (use_serial) {
+  process.stdin.setRawMode(true);
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+  e.bus.register("serial0-output-char", function(chr) {
+    process.stdout.write(chr);
+  });
+  process.stdin.on("data", function(c) {
+    e.bus.send("serial0-input", c);
+  });
+}
 
 function put_char(data) {
   if (data[0] < text_mode_size[1] && data[1] < text_mode_size[0]) {
@@ -281,6 +293,7 @@ function tick() {
     e.bus.send("mouse-wheel", [dll.poll_wheel(), 0]);
   }
   if (sum & defines.QUIT) {
+    if (use_serial) process.stdin.pause();
     e.destroy();
     dll.destroy();
     return;

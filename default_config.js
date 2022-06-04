@@ -3,10 +3,10 @@ const v86_config = {
   memory_size: 16 * 1024 * 1024,
   vga_memory_size: 4 * 1024 * 1024,
   bios: {
-    url: "./bios/bochs-bios.bin",
+    url: "./bios/seabios.bin",
   },
   vga_bios: {
-    url: "./bios/bochs-vgabios.bin",
+    url: "./bios/vgabios.bin",
   },
   hda: {
     //url: "d:/freebsd.img",
@@ -34,7 +34,8 @@ const config = {
   'anti_aliassing': true,
   'font_path': 'fonts/liberationmonob.ttf', // ascii.ttf not works with unicode
   'graphic_text_mode': true,
-  'console_text_mode': true
+  'console_text_mode': true,
+  'console_serial_mode': false
 };
 
 // TODO: Parse Configs
