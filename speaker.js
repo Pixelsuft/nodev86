@@ -1,28 +1,17 @@
 "use strict";
 
-/** @const */
-var DAC_QUEUE_RESERVE = 0.2;
+const DAC_QUEUE_RESERVE = 0.2;
 
-/** @const */
 var AUDIOBUFFER_MINIMUM_SAMPLING_RATE = 8000;
 
-/** @const */
-var MIXER_CHANNEL_LEFT = 0;
-/** @const */
-var MIXER_CHANNEL_RIGHT = 1;
-/** @const */
-var MIXER_CHANNEL_BOTH = 2;
-/** @const */
-var MIXER_SRC_MASTER = 0;
-/** @const */
-var MIXER_SRC_PCSPEAKER = 1;
-/** @const */
-var MIXER_SRC_DAC = 2;
-/** @const */
-var SPEAKER_DEBUG = false;
-
-/** @const */
-var OSCILLATOR_FREQ = 1193.1816666;
+const MIXER_CHANNEL_LEFT = 0;
+const MIXER_CHANNEL_RIGHT = 1;
+const MIXER_CHANNEL_BOTH = 2;
+const MIXER_SRC_MASTER = 0;
+const MIXER_SRC_PCSPEAKER = 1;
+const MIXER_SRC_DAC = 2;
+const SPEAKER_DEBUG = false;
+const OSCILLATOR_FREQ = 1193.1816666;
 
 /**
  * @constructor

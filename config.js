@@ -1,7 +1,7 @@
 const v86_config = {
   wasm_path: "./build/v86.wasm",
-  memory_size: 16 * 1024 * 1024,
-  vga_memory_size: 4 * 1024 * 1024,
+  memory_size: 32 * 1024 * 1024,
+  vga_memory_size: 8 * 1024 * 1024,
   bios: {
     url: "./bios/bochs-bios.bin",
   },
@@ -30,7 +30,7 @@ const v86_config = {
 const config = {
   'hardware_accel': true,
   'mouse_sens': 0.15 * 2,
-  'speaker': true,  // Beta
+  'speaker': true,  // Beta, But works
   'char_size': [9, 16],
   'font_size': 15,
   'font_bright': process.platform == 'win32',

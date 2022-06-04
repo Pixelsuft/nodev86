@@ -24,6 +24,7 @@ const Speaker = require('speaker');
 const defines = require('./defines');
 const v86 = require('./build/libv86');
 
+// Tricky fixed TODO
 global.ImageData = ImageData;
 if (c['speaker']) {
   global.AudioContext = AudioContext;
