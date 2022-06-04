@@ -1,8 +1,8 @@
 build
-configs
 external
 GTK
 node_modules
+configs/*
 src/SDL2
 src/SDL2_ttf
 package-lock.json
