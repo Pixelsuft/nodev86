@@ -86,7 +86,9 @@ static int sdl_keysym_to_scancode(int sym)  // Thanks halfix
         return 0xE051;
     case SDLK_DELETE:
         return 0xE053;
-    case SDLK_F1 ... SDLK_F12:
+    case SDLK_F12:
+        return 0x58;
+    case SDLK_F1 ... SDLK_F11:
         return 0x3B + (sym - SDLK_F1);
     case SDLK_SLASH:
         return 0x35;

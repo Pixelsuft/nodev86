@@ -265,6 +265,7 @@ V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg
 
 V86_API void screen_graphic_output(void* _data, int _x, int _y, int _width, int _height) {
   // This code for VBE, VGA has _y = 0
+  // Tick not working with win9x logo
   int _max_y = _y + _height;
   SDL_Rect _src_rect = { 0, 0, _width, _max_y };
   SDL_Rect _dst_rect = { _x, 0, _width, _max_y };
