@@ -1,7 +1,7 @@
 const v86_config = {
   wasm_path: "./build/v86.wasm",
-  memory_size: 512 * 1024 * 1024,
-  vga_memory_size: 16 * 1024 * 1024,
+  memory_size: 16 * 1024 * 1024,
+  vga_memory_size: 4 * 1024 * 1024,
   bios: {
     url: "./bios/bochs-bios.bin",
   },
