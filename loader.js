@@ -18,6 +18,7 @@ const dll = ffi.Library(
     'poll_mouse_clicks': ['int', []],
     'poll_key': ['int', []],
     'poll_wheel': ['int', []],
+    'set_loading': ['void', ['bool']],
     'set_graphical': ['void', ['bool']],
     'set_size_graphical': ['void', ['int', 'int']],
     'screen_draw_cursor': ['void', ['int', 'int', 'int', 'Uint8*']],

@@ -19,6 +19,7 @@ const v86_config = {
   cdrom: {
     //url: "d:/Images/kolibri.iso" // Not works with bochs bios
   },
+  network_relay_url: "wss://relay.widgetry.org/",
   acpi: false, // Set true for Windows 7
   autostart: true,
   boot_order: 0x132

@@ -145,6 +145,12 @@ e.bus.register("screen-fill-buffer-end", function(data) {
   });
   dll.flip_screen();
 });
+e.add_listener("ide-read-start", function() {
+  dll.set_loading(true);
+});
+e.add_listener("ide-read-end", function() {
+  dll.set_loading(false);
+});
 
 function put_char(data) {
   if (data[0] < text_mode_size[1] && data[1] < text_mode_size[0]) {

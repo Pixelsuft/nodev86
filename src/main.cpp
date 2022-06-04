@@ -34,6 +34,7 @@ TTF_Font* font;
 bool is_graphical = false;
 int char_count[2] = { 80, 25 };
 int screen_size[2] = { char_count[0] * char_size[0], char_count[1] * char_size[1] };
+bool is_loading = false;
 
 const string format_title() {
   string result("nodev86 [");
@@ -45,6 +46,9 @@ const string format_title() {
   result += "]";
   if (mouse_locked)
     result += " - Press ESC to Unlock Mouse";
+  result += " [";
+  result += is_loading ? "Loading" : "Idle";
+  result += "]";
   return result;
 }
 
@@ -199,6 +203,11 @@ V86_API void init(
     -1,
     renderer_flags
   );
+  update_title();
+}
+
+V86_API void set_loading(bool _is_loading) {
+  is_loading = _is_loading;
   update_title();
 }
 
