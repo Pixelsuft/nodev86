@@ -16,10 +16,19 @@ const {
   set_cursor_pos,
   str_to_utf16
 } = require('./screen_tools');
+const {
+  SpeakerAdapter
+} = require('./speaker');
+const AudioContext = require('web-audio-engine').StreamAudioContext;
+const Speaker = require('speaker');
 const defines = require('./defines');
 const v86 = require('./build/libv86');
 
 global.ImageData = ImageData;
+if (c['speaker']) {
+  global.AudioContext = AudioContext;
+  global.OutputSpeaker = Speaker;
+}
 
 const char_size = c['char_size'];
 const mouse_sens = c['mouse_sens'];
@@ -50,6 +59,7 @@ dll.init(
 );
 
 const e = new v86.V86Starter(v86_c);
+if (c['speaker']) new SpeakerAdapter(e.bus);
 
 e.bus.register("screen-clear", function() {
   if (use_console)
