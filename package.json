@@ -4,15 +4,19 @@
   "description": "v86 for nodejs with gui",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Pixelsuft/nodev86.git"
   },
   "keywords": [
-    "nodev86"
+    "nodev86",
+    "nodejs",
+    "emulator",
+    "sdl2",
+    "wasm",
+    "x86"
   ],
   "author": "Pixelsuft",
   "license": "GPL-3.0-or-later",
