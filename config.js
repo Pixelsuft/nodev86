@@ -16,11 +16,8 @@ const v86_config = {
     //url: "d:/windows31.img",
     //url: "d:/windows95.img", // Not works with bochs bios
   },
-  fda: {
-    //url: "d:/images/kolibri.img",
-  },
   cdrom: {
-    //url: "d:/Images/kolibri.iso"
+    //url: "d:/Images/kolibri.iso" // Not works with bochs bios
   },
   acpi: false, // Set true for Windows 7
   autostart: true,
