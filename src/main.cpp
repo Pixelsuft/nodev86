@@ -45,7 +45,7 @@ const string format_title() {
   result += to_string(screen_size[1]);
   result += "]";
   if (mouse_locked)
-    result += " - Press ESC to Unlock Mouse";
+    result += " [Press ESC to Unlock Mouse]";
   result += " [";
   result += is_loading ? "Loading" : "Idle";
   result += "]";
