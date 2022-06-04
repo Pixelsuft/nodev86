@@ -31,7 +31,6 @@ const config = {
   'speaker': true,  // Beta, But works
   'char_size': [9, 16],
   'font_size': 15,
-  'font_bright': process.platform == 'win32',
   'anti_aliassing': true,
   'font_path': 'fonts/liberationmonob.ttf', // ascii.ttf not works with unicode
   'graphic_text_mode': true,
