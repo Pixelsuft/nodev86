@@ -22,6 +22,7 @@ int char_size[2] = { 9, 16 };
 int font_size = 15;
 bool anti_aliassing = false;
 bool mouse_locked = false;
+bool load_font = false;
 int last_mouse_move[2] = { 0, 0 };
 bool button_states[3] = { false, false, false };
 int last_wheel = 0;
@@ -57,6 +58,8 @@ void update_title() {
 }
 
 V86_API void destroy() {
+  if (load_font)
+    TTF_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();
@@ -181,6 +184,7 @@ V86_API void init(
   screen_size[1] = char_count[1] * char_size[1];
   font_size = _font_size;
   anti_aliassing = _anti_aliassing;
+  load_font = _load_font;
   SDL_Init(SDL_INIT_VIDEO);
   if (_load_font) {
     TTF_Init();
@@ -253,6 +257,8 @@ V86_API void screen_draw_cursor(int _x, int _y, int _h, uint8_t* _bg) {
 }
 
 V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg, uint8_t* _fg) {
+  if (!load_font)
+    return;
   SDL_Rect _rect = {
     _x * char_size[0],
     _y * char_size[1],
@@ -267,9 +273,9 @@ V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg
     { _fg[0], _fg[1], _fg[2] }
   );
   SDL_Texture* _tex = SDL_CreateTextureFromSurface(renderer, _surf);
+  SDL_FreeSurface(_surf);
   SDL_RenderCopy(renderer, _tex, NULL, &_rect);
   SDL_DestroyTexture(_tex);
-  SDL_FreeSurface(_surf);
 }
 
 V86_API void screen_graphic_output(void* _data, int _x, int _y, int _width, int _height) {
