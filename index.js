@@ -7,7 +7,11 @@ const {
 const {
   v86_c,
   c
-} = require('./config');
+} = require(
+  process.argv.length > 2 ?
+  './configs/' + process.argv[2] :
+  './default_config'
+);
 const {
   number_as_color,
   charmap,
