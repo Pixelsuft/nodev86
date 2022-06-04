@@ -175,7 +175,7 @@ function console_text_update_row(row) {
     bg_color = text_mode_data[offset + 1];
     fg_color = text_mode_data[offset + 2];
     temp_fg = number_as_color(fg_color);
-    text += (temp_fg[0] + temp_fg[1] + temp_fg[2]) > 510 ? '\x1b[1m' : '\x1b[0m';
+    text += (temp_fg[0] > 170 || temp_fg[1] > 170 || temp_fg[2] > 170) ? '\x1b[1m' : '\x1b[0m';
     text += closer_color_bg(number_as_color(bg_color));
     text += closer_color_fg(temp_fg);
 
