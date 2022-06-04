@@ -18,7 +18,8 @@ Note: To build on windows, use mingw64 (`--mingw` flag) or msys2 <br />
 3) Configure `config.js` <br />
 4) Run with `npm start` or `node index`
 # Custom Configs
-1) Create `configs` dir and place configs <br />
-2) Run `node index config_name_here` (config name without `configs/` and `.js`)
+1) Create `configs` folder and place configs <br />
+2) Run `node index config_name_here` (config name without `configs/` and `.js`) <br />
+For example, `node index msdos` for `configs/msdos.js`
 # TODO
 1) Fix graphical text mode randomly not working
