@@ -241,8 +241,8 @@ V86_API void set_size_text(int _x_chars, int _y_chars) {
 }
 
 V86_API void set_size_graphical(int _width, int _height) {
-  if (!is_graphical)
-    return;
+  //if (!is_graphical)
+  //  return;
   screen_size[0] = _width;
   screen_size[1] = _height;
   SDL_SetWindowSize(window, _width, _height);
