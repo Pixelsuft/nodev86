@@ -140,6 +140,12 @@ V86_API int poll_events() {
           last_keys.push_back(0x01);
           result |= KEY;
         }
+        else if (event.key.keysym.sym == SDLK_F1) { // Ctrl + Alt + Delete
+          last_keys.push_back(0x1D);
+          last_keys.push_back(0x38);
+          last_keys.push_back(0x53);
+          result |= KEY;
+        }
         break;
       case SDL_KEYUP:
         if (mouse_locked) {
@@ -155,6 +161,12 @@ V86_API int poll_events() {
         }
         else if (event.key.keysym.sym == SDLK_ESCAPE) {
           last_keys.push_back(0x01 | 0x80);
+          result |= KEY;
+        }
+        else if (event.key.keysym.sym == SDLK_F1) { // Ctrl + Alt + Delete
+          last_keys.push_back(0x1D | 0x80);
+          last_keys.push_back(0x38 | 0x80);
+          last_keys.push_back(0x53 | 0x80);
           result |= KEY;
         }
       case SDL_MOUSEWHEEL:
