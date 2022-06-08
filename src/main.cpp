@@ -184,11 +184,11 @@ V86_API void init(
   screen_size[1] = char_count[1] * char_size[1];
   font_size = _font_size;
   anti_aliassing = _anti_aliassing;
-  load_font = _load_font;
   SDL_Init(SDL_INIT_VIDEO);
   if (_load_font) {
     TTF_Init();
     font = TTF_OpenFont(_font_path, font_size);
+    load_font = true;
   }
   SDL_WindowFlags window_flags = SDL_WINDOW_ALLOW_HIGHDPI;
   Uint32 renderer_flags = 0;
@@ -271,6 +271,10 @@ V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg
   };
   SDL_SetRenderDrawColor(renderer, _bg[0], _bg[1], _bg[2], 255);
   SDL_RenderFillRect(renderer, &_rect);
+  if (!_char || !font) {
+    // cout << "passed null" << endl;
+    return;
+  }
   SDL_Surface* _surf = (anti_aliassing ? TTF_RenderUNICODE_Blended : TTF_RenderUNICODE_Solid)(
     font,
     _char,

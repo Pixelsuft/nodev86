@@ -60,7 +60,7 @@ dll.init(
   c['hardware_accel'],
   c['anti_aliassing'],
   text_mode,
-  encoder.encode(c['font_path'])
+  encoder.encode(c['font_path'] + '\x00')
 );
 
 const e = new v86.V86Starter(v86_c);
