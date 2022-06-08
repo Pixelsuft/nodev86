@@ -8,12 +8,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#define QUIT 1 << 1
-#define MOVE 1 << 2
-#define CLICK 1 << 3
-#define WHEEL 1 << 4
-#define KEY 1 << 5
-
 
 using namespace std;
 
@@ -140,12 +134,6 @@ V86_API int poll_events() {
           last_keys.push_back(0x01);
           result |= KEY;
         }
-        else if (event.key.keysym.sym == SDLK_F1) { // Ctrl + Alt + Delete
-          last_keys.push_back(0x1D);
-          last_keys.push_back(0x38);
-          last_keys.push_back(0x53);
-          result |= KEY;
-        }
         break;
       case SDL_KEYUP:
         if (mouse_locked) {
@@ -163,11 +151,8 @@ V86_API int poll_events() {
           last_keys.push_back(0x01 | 0x80);
           result |= KEY;
         }
-        else if (event.key.keysym.sym == SDLK_F1) { // Ctrl + Alt + Delete
-          last_keys.push_back(0x1D | 0x80);
-          last_keys.push_back(0x38 | 0x80);
-          last_keys.push_back(0x53 | 0x80);
-          result |= KEY;
+        else if (event.key.keysym.sym == SDLK_F1) {
+          result |= CTRL_ALT_DEL;
         }
       case SDL_MOUSEWHEEL:
         if (mouse_locked) {

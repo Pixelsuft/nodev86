@@ -272,6 +272,12 @@ function update_graphical() {
   tick();
 }
 
+function keyboard_send_scancodes(codes) {
+  for (var i = 0; i < codes.length; i++) {
+    e.bus.send("keyboard-code", codes[i]);
+  }
+}
+
 function tick() {
   const sum = dll.poll_events();
   if (sum & defines.MOVE) {
@@ -297,6 +303,18 @@ function tick() {
     e.destroy();
     dll.destroy();
     return;
+  }
+  if (sum & defines.CTRL_ALT_DEL) {
+    keyboard_send_scancodes([
+      0x1D, // ctrl
+      0x38, // alt
+      0x53, // delete
+
+      // break codes
+      0x1D | 0x80,
+      0x38 | 0x80,
+      0x53 | 0x80,
+    ]);
   }
   setImmediate(is_graphical ? update_graphical : update_text);
 }

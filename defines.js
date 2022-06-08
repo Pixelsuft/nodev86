@@ -1,12 +1,6 @@
-const QUIT = 1 << 1;
-const MOVE = 1 << 2;
-const CLICK = 1 << 3;
-const WHEEL = 1 << 4;
-const KEY = 1 << 5;
-
-
-exports.QUIT = QUIT;
-exports.MOVE = MOVE;
-exports.CLICK = CLICK;
-exports.WHEEL = WHEEL;
-exports.KEY = KEY;
+exports.QUIT = 1 << 1;
+exports.MOVE = 1 << 2;
+exports.CLICK = 1 << 3;
+exports.WHEEL = 1 << 4;
+exports.KEY = 1 << 5;
+exports.CTRL_ALT_DEL = 1 << 6;
