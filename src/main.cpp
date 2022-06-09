@@ -28,16 +28,17 @@ TTF_Font* font;
 
 bool is_graphical = false;
 int char_count[2] = { 80, 25 };
-int screen_size[2] = { char_count[0] * char_size[0], char_count[1] * char_size[1] };
+int screen_size_text[2] = { char_count[0] * char_size[0], char_count[1] * char_size[1] };
+int screen_size_graphical[2] = { 320, 200 };
 bool is_loading = false;
 
 const string format_title() {
   string result("nodev86 [");
   result += is_graphical ? "Graphical" : "Text";
   result += "] [";
-  result += to_string(screen_size[0]);
+  result += to_string((is_graphical ? screen_size_graphical : screen_size_text)[0]);
   result += "x";
-  result += to_string(screen_size[1]);
+  result += to_string((is_graphical ? screen_size_graphical : screen_size_text)[1]);
   result += "]";
   if (mouse_locked)
     result += " [Press ESC to Unlock Mouse]";
@@ -177,8 +178,8 @@ V86_API void init(
 ) {
   char_size[0] = _char_size_x;
   char_size[1] = _char_size_y;
-  screen_size[0] = char_count[0] * char_size[0];
-  screen_size[1] = char_count[1] * char_size[1];
+  screen_size_text[0] = char_count[0] * char_size[0];
+  screen_size_text[1] = char_count[1] * char_size[1];
   font_size = _font_size;
   anti_aliassing = _anti_aliassing;
   SDL_Init(SDL_INIT_VIDEO);
@@ -195,8 +196,8 @@ V86_API void init(
     "nodev86",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
-    screen_size[0],
-    screen_size[1],
+    screen_size_text[0],
+    screen_size_text[1],
     window_flags
   );
   renderer = SDL_CreateRenderer(
@@ -223,26 +224,28 @@ V86_API void clear_screen() {
 
 V86_API void set_graphical(bool _is_graphical) {
   is_graphical = _is_graphical;
+  if (is_graphical)
+    SDL_SetWindowSize(window, screen_size_graphical[0], screen_size_graphical[1]);
+  else
+    SDL_SetWindowSize(window, screen_size_text[0], screen_size_text[1]);
   update_title();
 }
 
 V86_API void set_size_text(int _x_chars, int _y_chars) {
   char_count[0] = _x_chars;
   char_count[1] = _y_chars;
-  if (is_graphical)
-    return;
-  screen_size[0] = _x_chars * char_size[0];
-  screen_size[1] = _y_chars * char_size[1];
-  SDL_SetWindowSize(window, screen_size[0], screen_size[1]);
+  screen_size_text[0] = _x_chars * char_size[0];
+  screen_size_text[1] = _y_chars * char_size[1];
+  if (!is_graphical)
+    SDL_SetWindowSize(window, screen_size_text[0], screen_size_text[1]);
   update_title();
 }
 
 V86_API void set_size_graphical(int _width, int _height) {
-  //if (!is_graphical)
-  //  return;
-  screen_size[0] = _width;
-  screen_size[1] = _height;
-  SDL_SetWindowSize(window, _width, _height);
+  screen_size_graphical[0] = _width;
+  screen_size_graphical[1] = _height;
+  if (is_graphical)
+    SDL_SetWindowSize(window, screen_size_graphical[0], screen_size_graphical[1]);
   update_title();
 }
 
@@ -258,8 +261,6 @@ V86_API void screen_draw_cursor(int _x, int _y, int _h, uint8_t* _bg) {
 }
 
 V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg, uint8_t* _fg) {
-  if (!load_font)
-    return;
   SDL_Rect _rect = {
     _x * char_size[0],
     _y * char_size[1],
@@ -285,7 +286,7 @@ V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg
 
 V86_API void screen_graphic_output(void* _data, int _x, int _y, int _width, int _height) {
   // This code for VBE, VGA has _y = 0
-  // Tick not working with win9x logo
+  // Trick is not working with win9x logo
   int _max_y = _y + _height;
   SDL_Rect _src_rect = { 0, 0, _width, _max_y };
   SDL_Rect _dst_rect = { _x, 0, _width, _max_y };
