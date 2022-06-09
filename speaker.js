@@ -1,5 +1,3 @@
-"use strict";
-
 const DAC_QUEUE_RESERVE = 0.2;
 
 var AUDIOBUFFER_MINIMUM_SAMPLING_RATE = 8000;

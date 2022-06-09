@@ -14,6 +14,7 @@ const dll = ffi.Library(
     'destroy': ['void', []],
     'flip_screen': ['void', []],
     'clear_screen': ['void', []],
+    'microtick': ['Uint64', []],
     'poll_mouse_x': ['int', []],
     'poll_mouse_y': ['int', []],
     'poll_mouse_clicks': ['int', []],

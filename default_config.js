@@ -29,7 +29,8 @@ const config = {
   'hardware_accel': true,
   'mouse_sens': 0.15 * 2,
   'speaker': true,  // Beta, But works
-  'custom_acpi': false, // Requires default ACPI
+  'custom_acpi': false,
+  'custom_apic': false,  // TODO
   'char_size': [9, 16],
   'font_size': 15,
   'anti_aliassing': true,

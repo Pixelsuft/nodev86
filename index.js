@@ -26,6 +26,12 @@ const {
 const {
   ACPI
 } = require('./acpi');
+const {
+  IOAPIC
+} = require('./ioapic');
+const {
+  APIC
+} = require('./apic');
 const AudioContext = require('web-audio-engine').StreamAudioContext;
 const Speaker = require('speaker');
 const defines = require('./defines');
@@ -71,8 +77,15 @@ const e = new v86.V86Starter(v86_c);
 e.bus.register("emulator-ready", function() {
   //console.log(e.v86.cpu.devices);
   //console.log(e.v86.cpu.devices.acpi);
-  if (c['custom_acpi'])
+  if (c['custom_apic']) {
+    // TODO
+    e.v86.cpu.devices.ioapic = new IOAPIC(e.v86.cpu);
+    e.v86.cpu.devices.apic = new APIC(e.v86.cpu);
+  }
+  if (c['custom_acpi']) {
+    e.v86.cpu.acpi_enabled[0] = true;
     e.v86.cpu.devices.acpi = new ACPI(e.v86.cpu);
+  }
   if (c['speaker'])
     new SpeakerAdapter(e.bus);
   e.bus.send("cpu-run");

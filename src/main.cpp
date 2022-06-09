@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <chrono>
 #include <extern_api.h>
 #include <scancode.h>
 #include <charcode.h>
@@ -10,6 +11,7 @@
 
 
 using namespace std;
+using namespace std::chrono;
 
 
 int char_size[2] = { 9, 16 };
@@ -31,6 +33,10 @@ int char_count[2] = { 80, 25 };
 int screen_size_text[2] = { char_count[0] * char_size[0], char_count[1] * char_size[1] };
 int screen_size_graphical[2] = { 320, 200 };
 bool is_loading = false;
+
+V86_API uint64_t microtick() {
+  return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
 
 const string format_title() {
   string result("nodev86 [");
