@@ -21,7 +21,7 @@ const v86_config = {
   },
   network_relay_url: "wss://relay.widgetry.org/",
   acpi: false, // Set true for Windows 7
-  autostart: true,
+  autostart: false,
   boot_order: 0x132
 };
 
