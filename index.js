@@ -64,8 +64,11 @@ dll.init(
 );
 
 const e = new v86.V86Starter(v86_c);
-if (c['speaker']) new SpeakerAdapter(e.bus);
 
+e.bus.register("emulator-ready", function(){
+  if (c['speaker']) new SpeakerAdapter(e.bus);
+  e.bus.send("cpu-run");
+});
 e.bus.register("screen-clear", function() {
   if (use_console)
     process.stdout.write('\x1b[2J' + set_cursor_pos(cursor_pos[1] + 1, cursor_pos[0] + 1));
