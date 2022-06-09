@@ -34,8 +34,10 @@ int screen_size_text[2] = { char_count[0] * char_size[0], char_count[1] * char_s
 int screen_size_graphical[2] = { 320, 200 };
 bool is_loading = false;
 
+uint64_t start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+
 V86_API uint64_t microtick() {
-  return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+  return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - start_time;
 }
 
 const string format_title() {

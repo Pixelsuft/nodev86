@@ -26,15 +26,17 @@ const {
 const {
   ACPI
 } = require('./acpi');
-const {
-  IOAPIC
-} = require('./ioapic');
-const {
-  APIC
-} = require('./apic');
 const AudioContext = require('web-audio-engine').StreamAudioContext;
 const Speaker = require('speaker');
 const defines = require('./defines');
+const {
+  performance
+} = require('perf_hooks');
+if (!c['disable_microtick_hook']) {
+  performance.now.bind = function() {
+    return dll.microtick;
+  }
+}
 const v86 = require('./build/libv86');
 
 // Tricky fixed TODO
@@ -77,13 +79,7 @@ const e = new v86.V86Starter(v86_c);
 e.bus.register("emulator-ready", function() {
   //console.log(e.v86.cpu.devices);
   //console.log(e.v86.cpu.devices.acpi);
-  if (c['custom_apic']) {
-    // TODO
-    e.v86.cpu.devices.ioapic = new IOAPIC(e.v86.cpu);
-    e.v86.cpu.devices.apic = new APIC(e.v86.cpu);
-  }
   if (c['custom_acpi']) {
-    e.v86.cpu.acpi_enabled[0] = true;
     e.v86.cpu.devices.acpi = new ACPI(e.v86.cpu);
   }
   if (c['speaker'])

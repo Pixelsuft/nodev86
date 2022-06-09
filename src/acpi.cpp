@@ -16,9 +16,10 @@ uint64_t last_timer = 0;
 uint8_t gpe[4] = { 0, 0, 0, 0 };
 
 int last_result = 0;
+uint64_t acpi_start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 
 V86_API uint64_t acpi_microtick() {
-  return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+  return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - acpi_start_time;
 }
 
 V86_API uint64_t acpi_get_timer(uint64_t now) {
