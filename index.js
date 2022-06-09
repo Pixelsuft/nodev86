@@ -65,7 +65,7 @@ dll.init(
 
 const e = new v86.V86Starter(v86_c);
 
-e.bus.register("emulator-ready", function(){
+e.bus.register("emulator-ready", function() {
   if (c['speaker']) new SpeakerAdapter(e.bus);
   e.bus.send("cpu-run");
 });
