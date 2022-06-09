@@ -23,6 +23,9 @@ const {
 const {
   SpeakerAdapter
 } = require('./speaker');
+const {
+  ACPI
+} = require('./acpi');
 const AudioContext = require('web-audio-engine').StreamAudioContext;
 const Speaker = require('speaker');
 const defines = require('./defines');
@@ -66,7 +69,12 @@ dll.init(
 const e = new v86.V86Starter(v86_c);
 
 e.bus.register("emulator-ready", function() {
-  if (c['speaker']) new SpeakerAdapter(e.bus);
+  //console.log(e.v86.cpu.devices);
+  //console.log(e.v86.cpu.devices.acpi);
+  if (c['custom_acpi'])
+    e.v86.cpu.devices.acpi = new ACPI(e.v86.cpu);
+  if (c['speaker'])
+    new SpeakerAdapter(e.bus);
   e.bus.send("cpu-run");
 });
 e.bus.register("screen-clear", function() {

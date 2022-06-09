@@ -9,6 +9,7 @@ if (process.platform == 'win32') {
 }
 const dll = ffi.Library(
   path.join(__dirname, 'external', 'nodev86.' + file_ext), {
+    // Base
     'init': ['void', ['int', 'int', 'int', 'bool', 'bool', 'bool', 'bool', 'char*']],
     'destroy': ['void', []],
     'flip_screen': ['void', []],
@@ -25,7 +26,17 @@ const dll = ffi.Library(
     'screen_put_char': ['void', ['int', 'int', 'int', 'Uint16*', 'Uint8*', 'Uint8*']],
     'screen_graphic_output': ['void', ['char*', 'int', 'int', 'int', 'int']],
     'set_size_text': ['void', ['int', 'int']],
-    'poll_events': ['int', []]
+    'poll_events': ['int', []],
+    // ACPI
+    'acpi_microtick': ['Uint64', []],
+    'acpi_read8': ['Uint8', ['Uint32']],
+    'acpi_read16': ['Uint16', ['Uint32']],
+    'acpi_read32': ['Uint32', ['Uint32']],
+    'acpi_write8': ['void', ['Uint32', 'Uint8']],
+    'acpi_write16': ['void', ['Uint32', 'Uint16']],
+    'acpi_get_timer': ['Uint64', ['Uint64']],
+    'acpi_timer': ['bool', ['Uint64']],
+    'acpi_get_result': ['int', []],
   }
 );
 

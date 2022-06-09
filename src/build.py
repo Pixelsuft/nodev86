@@ -81,10 +81,10 @@ extern_path = os.path.join(
 if not os.path.isdir(extern_path):
     os.mkdir(extern_path)
 compiler = os.getenv('CC') or 'g++'
-input_file = os.path.join(
-    cwd,
-    'main.cpp'
-)
+input_files = [
+    os.path.join(cwd, _x) for _x in os.listdir(cwd)
+    if _x.lower().endswith('.cpp')
+]
 include_path = os.path.join(
     cwd,
     'include'
@@ -99,7 +99,7 @@ if os.path.isdir(output_file):
 
 result = subprocess.call([
     compiler,
-    input_file,
+    *input_files,
     '-o',
     output_file,
     '-shared',
@@ -109,5 +109,5 @@ result = subprocess.call([
     *sdl2_flags
 ], shell=is_windows)
 if result:
-    print(f'[{hex(result)}] Failed to compile {input_file}!')
+    print(f'[{hex(result)}] Failed to compile code!')
     sys.exit(1)
