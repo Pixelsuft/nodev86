@@ -15,7 +15,7 @@ v86 on nodejs + sdl2
 Note: To build on windows, use mingw64 (`--mingw` flag) or msys2 <br />
 1) Build .dll/.so library using `build.py` script in src folder <br />
 2) Install nodejs packages with `npm i` <br />
-3) Configure `config.js` <br />
+3) Configure `default_config.js` or create custom <br />
 4) Run with `npm start` or `node index`
 # Custom Configs
 1) Create `configs` folder and place configs <br />
