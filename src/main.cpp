@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-#include <chrono>
+#include <sys/time.h>
 #include <extern_api.h>
 #include <scancode.h>
 #include <charcode.h>
@@ -11,7 +11,6 @@
 
 
 using namespace std;
-using namespace std::chrono;
 
 
 int char_size[2] = { 9, 16 };
@@ -23,6 +22,7 @@ int last_mouse_move[2] = { 0, 0 };
 bool button_states[3] = { false, false, false };
 int last_wheel = 0;
 vector<int> last_keys;
+uint64_t base_time;
 
 SDL_Window* window;
 SDL_Renderer* renderer;
@@ -33,12 +33,6 @@ int char_count[2] = { 80, 25 };
 int screen_size_text[2] = { char_count[0] * char_size[0], char_count[1] * char_size[1] };
 int screen_size_graphical[2] = { 320, 200 };
 bool is_loading = false;
-
-uint64_t start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-
-V86_API uint64_t microtick() {
-  return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - start_time;
-}
 
 const string format_title() {
   string result("nodev86 [");
@@ -58,6 +52,15 @@ const string format_title() {
 
 void update_title() {
   SDL_SetWindowTitle(window, format_title().data());
+}
+
+V86_API uint64_t microtick() {
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  uint64_t hi = (uint64_t)tv.tv_sec * (uint64_t)1000000 + (uint64_t)tv.tv_usec;
+  if (!base_time)
+    base_time = hi;
+  return hi - base_time;
 }
 
 V86_API void destroy() {

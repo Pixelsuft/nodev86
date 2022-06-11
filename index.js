@@ -35,7 +35,9 @@ const {
 } = require('perf_hooks');
 if (!c['disable_microtick_hook']) {
   performance.now.bind = function() {
-    return dll.microtick;
+    return function() {
+      return dll.microtick() / 1000
+    };
   }
 }
 const v86 = require('./build/libv86');

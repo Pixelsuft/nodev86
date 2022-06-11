@@ -55,15 +55,20 @@ function ACPI(cpu) {
   io.register_read(0xB008, this, undefined, undefined, function() {
     return dll.acpi_read32(0xB008);
   });
+  /*io.register_read(0xB008, this, undefined, undefined, function() {
+    const result = dll.acpi_read32(0xB008);
+    console.log(result);
+    return result;
+  });*/
 }
 
 ACPI.prototype.timer = function(now) {
-  var result = dll.acpi_timer(now);
-  if (result)
+  if (dll.acpi_timer(now))
     this.cpu.device_lower_irq(9)
   else
     this.cpu.device_raise_irq(9);
   return dll.acpi_get_result();
+  // return 100;
 };
 
 ACPI.prototype.get_state = function() {

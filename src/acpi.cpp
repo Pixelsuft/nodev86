@@ -1,12 +1,11 @@
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
+#include <sys/time.h>
 #include <extern_api.h>
 #define PMTIMER_FREQ_SECONDS 3579545
 
 
 using namespace std;
-using namespace std::chrono;
 
 uint16_t status = 1;
 uint16_t pm1_status = 0;
@@ -16,14 +15,19 @@ uint64_t last_timer = 0;
 uint8_t gpe[4] = { 0, 0, 0, 0 };
 
 int last_result = 0;
-uint64_t acpi_start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+uint64_t acpi_start_time;
 
 V86_API uint64_t acpi_microtick() {
-  return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() - acpi_start_time;
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  uint64_t hi = (uint64_t)tv.tv_sec * (uint64_t)1000000 + (uint64_t)tv.tv_usec;
+  if (!acpi_start_time)
+    acpi_start_time = hi;
+  return hi - acpi_start_time;
 }
 
 V86_API uint64_t acpi_get_timer(uint64_t now) {
-  return (uint64_t)(now * PMTIMER_FREQ_SECONDS / 1000);
+  return (uint64_t)(now * PMTIMER_FREQ_SECONDS / 1000000);
 }
 
 V86_API int acpi_get_result() {
@@ -43,7 +47,7 @@ V86_API bool acpi_timer(uint64_t now) {
     is_lower = true;
   }
 
-  last_result = (int)((0x1000000 - now) / 1000 * PMTIMER_FREQ_SECONDS);
+  last_result = (int)((0x1000000 - now) / 1000000 * PMTIMER_FREQ_SECONDS);
   last_timer = timer;
 
   return is_lower;
