@@ -28,6 +28,8 @@ const {
 } = require('./acpi');
 const AudioContext = require('web-audio-engine').StreamAudioContext;
 const Speaker = require('speaker');
+const fs = require('fs');
+const path = require('path');
 const defines = require('./defines');
 const custom_charmap = require('./charmaps/' + (c['charmap'] || 'default'));
 const {
@@ -338,6 +340,26 @@ function tick() {
       0x38 | 0x80,
       0x53 | 0x80,
     ]);
+  }
+  if (sum & defines.SAVE_STATE) {
+    e.save_state(async function(err, s) {
+      if (err)
+        throw err;
+      const blob = new Blob([s], {type: 'application/octet-stream'});
+      const buffer = Buffer.from(await blob.arrayBuffer());
+      fs.writeFileSync(
+        path.join(__dirname, 'states', (process.argv.length > 2 ? process.argv[2] : 'default') + '.bin'),
+        buffer,
+        'binary'
+      );
+    });
+  }
+  if (sum & defines.LOAD_STATE) {
+    e.restore_state(fs.readFileSync(
+      path.join(__dirname, 'states', (process.argv.length > 2 ? process.argv[2] : 'default') + '.bin'),
+      'utf8',
+      'binary'
+    ));
   }
   setImmediate(is_graphical ? update_graphical : update_text);
 }

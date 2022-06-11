@@ -82,12 +82,28 @@ ACPI.prototype.get_timer = dll.acpi_get_timer;
 
 ACPI.prototype.get_state = function() {
   const dll_state = dll.acpi_get_state();
-  var state = dll_state;
-  return state;
+  return [
+    dll_state[0],
+    dll_state[1],
+    dll_state[2],
+    [
+      dll_state[3],
+      dll_state[4],
+      dll_state[5],
+      dll_state[6],
+    ]
+  ];
 };
 
 ACPI.prototype.set_state = function(state) {
-  var dll_state = state;
+  var dll_state = new Uint16Array(7);
+  dll_state[0] = state[0];
+  dll_state[1] = state[1];
+  dll_state[2] = state[2];
+  dll_state[3] = state[3][0];
+  dll_state[4] = state[3][1];
+  dll_state[5] = state[3][2];
+  dll_state[6] = state[3][3];
   dll.acpi_set_state(dll_state);
 };
 

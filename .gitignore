@@ -3,6 +3,7 @@ configs
 external
 GTK
 node_modules
+states
 src/SDL2
 src/SDL2_ttf
 package-lock.json

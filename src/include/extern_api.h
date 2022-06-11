@@ -11,3 +11,5 @@
 #define WHEEL 1 << 4
 #define KEY 1 << 5
 #define CTRL_ALT_DEL 1 << 6
+#define SAVE_STATE 1 << 7
+#define LOAD_STATE 1 << 8

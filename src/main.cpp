@@ -164,6 +164,12 @@ V86_API int poll_events() {
           result |= KEY;
         }
         else if (event.key.keysym.sym == SDLK_F1) {
+          result |= SAVE_STATE;
+        }
+        else if (event.key.keysym.sym == SDLK_F2) {
+          result |= LOAD_STATE;
+        }
+        else if (event.key.keysym.sym == SDLK_F3) {
           result |= CTRL_ALT_DEL;
         }
       case SDL_MOUSEWHEEL:
