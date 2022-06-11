@@ -11,7 +11,7 @@ const v86_config = {
   hda: {
     //url: "d:/freebsd.img",
     //async: true, // For larger images
-    url: "d:/msdos.img",
+    //url: "d:/msdos.img",
     //url: "d:/copy_winnt.img",
     //url: "d:/windows31.img",
     //url: "d:/windows95.img", // Not works with bochs bios
@@ -29,8 +29,8 @@ const config = {
   'hardware_accel': true,
   'mouse_sens': 0.15 * 2,
   'speaker': true, // Beta, But works
-  'custom_acpi': false, // Requires default ACPI
-  'disable_microtick_hook': false,
+  'custom_acpi': false, // Requires default ACPI, works bad with Windows 7
+  'disable_microtick_hook': false, // Set true if win 7 logo doesn't appear
   'char_size': [9, 16],
   'font_size': 15,
   'charmap': 'default',
