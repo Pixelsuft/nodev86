@@ -33,6 +33,7 @@ const config = {
   'disable_microtick_hook': false,
   'char_size': [9, 16],
   'font_size': 15,
+  'charmap': 'default',
   'anti_aliassing': true,
   'font_path': 'fonts/liberationmonob.ttf', // ascii.ttf not works with unicode
   'graphic_text_mode': true,

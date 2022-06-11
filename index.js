@@ -14,11 +14,11 @@ const {
 );
 const {
   number_as_color,
-  charmap,
   closer_color_bg,
   closer_color_fg,
   set_cursor_pos,
-  str_to_utf16
+  str_to_utf16,
+  update_charmap
 } = require('./screen_tools');
 const {
   SpeakerAdapter
@@ -29,6 +29,7 @@ const {
 const AudioContext = require('web-audio-engine').StreamAudioContext;
 const Speaker = require('speaker');
 const defines = require('./defines');
+const custom_charmap = require('./charmaps/' + (c['charmap'] || 'default'));
 const {
   performance
 } = require('perf_hooks');
@@ -51,6 +52,7 @@ const mouse_sens = c['mouse_sens'];
 const text_mode = c['graphic_text_mode'];
 const use_console = c['console_text_mode'];
 const use_serial = c['console_serial_mode'];
+const charmap = update_charmap(custom_charmap.high, custom_charmap.low);
 const encoder = new TextEncoder();
 
 var is_graphical = false;
@@ -77,8 +79,6 @@ dll.init(
 const e = new v86.V86Starter(v86_c);
 
 e.bus.register("emulator-ready", function() {
-  //console.log(e.v86.cpu.devices);
-  //console.log(e.v86.cpu.devices.acpi);
   if (c['custom_acpi']) {
     e.v86.cpu.devices.acpi = new ACPI(e.v86.cpu);
   }

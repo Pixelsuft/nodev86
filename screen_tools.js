@@ -24,17 +24,22 @@ var charmap_low = new Uint16Array([
   0x2191, 0x2193, 0x2192, 0x2190, 0x221F, 0x2194, 0x25B2, 0x25BC
 ]);
 
-var charmap = [],
-  chr;
-
-for (var i = 0; i < 256; i++) {
-  if (i > 127) {
-    charmap[i] = String.fromCharCode(charmap_high[i - 0x80]);
-  } else if (i < 32) {
-    charmap[i] = String.fromCharCode(charmap_low[i]);
-  } else {
-    charmap[i] = String.fromCharCode(i);
+function update_charmap(high, low) {
+  var charmap = [];
+  if (!high)
+    high = charmap_high;
+  if (!low)
+    low = charmap_low;
+  for (var i = 0; i < 256; i++) {
+    if (i > 127) {
+      charmap[i] = String.fromCharCode(high[i - 0x80]);
+    } else if (i < 32) {
+      charmap[i] = String.fromCharCode(low[i]);
+    } else {
+      charmap[i] = String.fromCharCode(i);
+    }
   }
+  return charmap;
 }
 
 const fg_colors = {
@@ -95,7 +100,7 @@ function str_to_utf16(str) {
   return arr;
 }
 
-exports.charmap = charmap;
+exports.update_charmap = update_charmap;
 exports.number_as_color = number_as_color;
 exports.closer_color_bg = closer_color_bg;
 exports.closer_color_fg = closer_color_fg;
