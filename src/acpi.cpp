@@ -69,7 +69,10 @@ V86_API bool acpi_timer(uint64_t now) {
     is_lower = true;
   }
 
-  last_result = (int)(((uint64_t)0x1000000 - now) / (uint64_t)1000000 * (uint64_t)PMTIMER_FREQ_SECONDS);
+  if (pm1_enable & 1)
+    last_result = (int)(((uint64_t)0x1000000 - now) / (uint64_t)1000000 * (uint64_t)PMTIMER_FREQ_SECONDS);
+  else
+    last_result = -1;
   last_timer = timer;
 
   return is_lower;
