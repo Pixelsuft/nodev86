@@ -81,9 +81,9 @@ function set_cursor_pos(x, y) {
 
 function number_as_color(n) {
   return [
-    n >> 16,
-    Math.floor((n / 256) % 256),
-    n % 256
+    n >> 16 & 0xFF,
+    n >> 8 & 0xFF,
+    n & 0xFF
   ];
 }
 
