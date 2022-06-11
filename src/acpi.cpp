@@ -16,6 +16,28 @@ uint8_t gpe[4] = { 0, 0, 0, 0 };
 
 int last_result = 0;
 uint64_t acpi_start_time;
+uint16_t acpi_state[7];
+
+V86_API uint16_t* acpi_get_state() {
+  acpi_state[0] = status;
+  acpi_state[1] = pm1_status;
+  acpi_state[2] = pm1_enable;
+  acpi_state[3] = (uint16_t)gpe[0];
+  acpi_state[4] = (uint16_t)gpe[1];
+  acpi_state[5] = (uint16_t)gpe[2];
+  acpi_state[6] = (uint16_t)gpe[3];
+  return acpi_state;
+}
+
+V86_API void acpi_set_state(uint16_t* acpi_state) {
+  status = acpi_state[0];
+  pm1_status = acpi_state[1];
+  pm1_enable = acpi_state[2];
+  gpe[0] = (uint8_t)acpi_state[3];
+  gpe[1] = (uint8_t)acpi_state[4];
+  gpe[2] = (uint8_t)acpi_state[5];
+  gpe[3] = (uint8_t)acpi_state[6];
+}
 
 V86_API uint64_t acpi_microtick() {
   struct timeval tv;

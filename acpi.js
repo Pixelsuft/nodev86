@@ -81,19 +81,14 @@ ACPI.prototype.timer = function(now) {
 ACPI.prototype.get_timer = dll.acpi_get_timer;
 
 ACPI.prototype.get_state = function() {
-  var state = [];
-  /*state[0] = this.status;
-  state[1] = this.pm1_status;
-  state[2] = this.pm1_enable;
-  state[3] = this.gpe;*/
+  const dll_state = dll.acpi_get_state();
+  var state = dll_state;
   return state;
 };
 
 ACPI.prototype.set_state = function(state) {
-  /*this.status = state[0];
-  this.pm1_status = state[1];
-  this.pm1_enable = state[2];
-  this.gpe = state[3];*/
+  var dll_state = state;
+  dll.acpi_set_state(dll_state);
 };
 
 

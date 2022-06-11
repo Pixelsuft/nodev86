@@ -38,6 +38,8 @@ const dll = ffi.Library(
     'acpi_get_timer': ['Uint32', ['Uint64']],
     'acpi_timer': ['bool', ['Uint64']],
     'acpi_get_result': ['int', []],
+    'acpi_get_state': ['Uint16*', []],
+    'acpi_set_state': ['void', ['Uint16*']],
   }
 );
 
