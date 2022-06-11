@@ -36,7 +36,7 @@ const {
 if (!c['disable_microtick_hook']) {
   performance.now.bind = function() {
     return function() {
-      return dll.microtick() / 1000
+      return dll.microtick() / 1000;
     };
   }
 }
