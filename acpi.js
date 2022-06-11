@@ -2,8 +2,6 @@ const {
   dll
 } = require('./loader');
 
-const PMTIMER_FREQ_SECONDS = 3579545;
-
 function ACPI(cpu) {
   this.cpu = cpu;
 
@@ -23,43 +21,53 @@ function ACPI(cpu) {
 
   cpu.devices.pci.register_device(acpi);
 
-  const read8 = [0xAFE0, 0xAFE1, 0xAFE2, 0xAFE3];
-  const read16 = [0xB000, 0xB002, 0xB004];
-  const write8 = [0xAFE0, 0xAFE1, 0xAFE2, 0xAFE3];
-  const write16 = [0xB000, 0xB002, 0xB004];
+  io.register_read(0xB000, this, undefined, function() {
+    return dll.acpi_read16(0xB000);
+  });
+  io.register_read(0xB002, this, undefined, function() {
+    return dll.acpi_read16(0xB002);
+  });
+  io.register_read(0xB004, this, undefined, function() {
+    return dll.acpi_read16(0xB004);
+  });
+  io.register_write(0xB000, this, undefined, function(value) {
+    dll.acpi_write16(0xB000, value);
+  });
+  io.register_write(0xB002, this, undefined, function(value) {
+    dll.acpi_write16(0xB002, value);
+  });
+  io.register_write(0xB004, this, undefined, function(value) {
+    dll.acpi_write16(0xB004, value);
+  });
 
-  for (var _i = 0; _i < read8.length; _i++) {
-    const i = read8[_i];
-    io.register_read(i, this, function() {
-      return dll.acpi_read8(i);
-    });
-  }
-  for (var _i = 0; _i < read16.length; _i++) {
-    const i = read16[_i];
-    io.register_read(i, this, undefined, function() {
-      return dll.acpi_read16(i);
-    });
-  }
-  for (var _i = 0; _i < write8.length; _i++) {
-    const i = write8[_i];
-    io.register_write(i, this, function(value) {
-      dll.acpi_write8(i, value);
-    });
-  }
-  for (var _i = 0; _i < write16.length; _i++) {
-    const i = write16[_i];
-    io.register_write(i, this, undefined, function(value) {
-      dll.acpi_write16(i, value);
-    });
-  }
+  io.register_read(0xAFE0, this, function() {
+    return dll.acpi_read8(0xAFE0);
+  });
+  io.register_read(0xAFE1, this, function() {
+    return dll.acpi_read8(0xAFE1);
+  });
+  io.register_read(0xAFE2, this, function() {
+    return dll.acpi_read8(0xAFE2);
+  });
+  io.register_read(0xAFE3, this, function() {
+    return dll.acpi_read8(0xAFE3);
+  });
+  io.register_write(0xAFE0, this, function(value) {
+    dll.acpi_write8(0xAFE0, value);
+  });
+  io.register_write(0xAFE1, this, function(value) {
+    dll.acpi_write8(0xAFE1, value);
+  });
+  io.register_write(0xAFE2, this, function(value) {
+    dll.acpi_write8(0xAFE2, value);
+  });
+  io.register_write(0xAFE3, this, function(value) {
+    dll.acpi_write8(0xAFE3, value);
+  });
+
   io.register_read(0xB008, this, undefined, undefined, function() {
     return dll.acpi_read32(0xB008);
   });
-  /*io.register_read(0xB008, this, undefined, undefined, function() {
-    const result = dll.acpi_read32(0xB008);
-    console.log(result);
-    return result;
-  });*/
 }
 
 ACPI.prototype.timer = function(now) {
@@ -68,8 +76,9 @@ ACPI.prototype.timer = function(now) {
   else
     this.cpu.device_raise_irq(9);
   return dll.acpi_get_result();
-  // return 100;
 };
+
+ACPI.prototype.get_timer = dll.acpi_get_timer;
 
 ACPI.prototype.get_state = function() {
   var state = [];
