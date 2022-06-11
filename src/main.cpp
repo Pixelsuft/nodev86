@@ -7,6 +7,9 @@
 #include <scancode.h>
 #include <charcode.h>
 #include <SDL2/SDL.h>
+#ifdef WIN32_DARK_THEME
+  #include <SDL2/SDL_syswm.h>
+#endif
 #include <SDL2/SDL_ttf.h>
 
 
@@ -217,6 +220,17 @@ V86_API void init(
     screen_size_text[1],
     window_flags
   );
+  #ifdef WIN32_DARK_THEME
+    SDL_SysWMinfo wmi;
+    SDL_VERSION(&wmi.version);
+    SDL_GetWindowWMInfo(window, &wmi);
+    HWND hwnd = wmi.info.win.window;
+    SetWindowTheme(hwnd, L"SDL_app", NULL);
+    BOOL dark_mode = 1;
+    if (!DwmSetWindowAttribute(hwnd, 20, &dark_mode, sizeof dark_mode)) {
+      DwmSetWindowAttribute(hwnd, 19, &dark_mode, sizeof dark_mode);
+    }
+  #endif
   renderer = SDL_CreateRenderer(
     window,
     -1,

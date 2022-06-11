@@ -66,6 +66,8 @@ if is_windows:
             print('Usage: python build.py $(sdl2-config --cflags --libs)')
             sys.exit(1)
         sdl2_flags.append('-lSDL2_ttf')
+    sdl2_flags.append('-luxtheme')
+    sdl2_flags.append('-ldwmapi')
 else:
     if not os.getenv('SDL2_FLAGS'):
         print('Please, set SDL2 flags before: ')
