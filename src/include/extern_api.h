@@ -4,7 +4,6 @@
   #include <Windows.h>
   #ifdef WIN32_DARK_THEME
     #include <dwmapi.h>
-    #include <uxtheme.h>
   #endif
   #define V86_API extern "C" __declspec(dllexport)
 #else
