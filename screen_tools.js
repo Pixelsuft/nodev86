@@ -59,11 +59,6 @@ const bg_colors = {
   '111': '\x1b[47m'
 };
 
-const hex_to_rgb = hex =>
-  hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => '#' + r + r + g + g + b + b)
-  .substring(1).match(/.{2}/g)
-  .map(x => parseInt(x, 16));
-
 function closer_color_bg(rgb) {
   return bg_colors[[
     Math.round(rgb[0] / 255),
@@ -85,8 +80,11 @@ function set_cursor_pos(x, y) {
 }
 
 function number_as_color(n) {
-  n = n.toString(16);
-  return hex_to_rgb("#" + "0".repeat(6 - n.length) + n);
+  return [
+    n >> 16,
+    Math.floor((n / 256) % 256),
+    n % 256
+  ];
 }
 
 function str_to_utf16(str) {

@@ -84,7 +84,8 @@ e.bus.register("emulator-ready", function() {
   }
   if (c['speaker'])
     new SpeakerAdapter(e.bus);
-  e.bus.send("cpu-run");
+  if (!v86_c['autostart'])
+    e.bus.send("cpu-run");
 });
 e.bus.register("screen-clear", function() {
   if (use_console)
