@@ -23,7 +23,7 @@ V86_API uint64_t acpi_microtick() {
 }
 
 V86_API uint64_t acpi_get_timer(uint64_t now) {
-  return (uint64_t)(now * PMTIMER_FREQ_SECONDS / 1000000);
+  return (uint64_t)(now * PMTIMER_FREQ_SECONDS / 1000);
 }
 
 V86_API int acpi_get_result() {
@@ -43,7 +43,7 @@ V86_API bool acpi_timer(uint64_t now) {
     is_lower = true;
   }
 
-  last_result = (int)((0x1000000 - now) / 1000000 * PMTIMER_FREQ_SECONDS);
+  last_result = (int)((0x1000000 - now) / 1000 * PMTIMER_FREQ_SECONDS);
   last_timer = timer;
 
   return is_lower;
