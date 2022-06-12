@@ -14,7 +14,7 @@ function RTC(cpu) {
     return dll.cmos_readb_71();
   });
 
-  cpu.io.register_write(0x71, this, dll.cmos_writeb_70);
+  cpu.io.register_write(0x70, this, dll.cmos_writeb_70);
   cpu.io.register_write(0x71, this, dll.cmos_writeb_71);
 }
 
