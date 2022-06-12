@@ -15,6 +15,7 @@ const dll = ffi.Library(
     'flip_screen': ['void', []],
     'clear_screen': ['void', []],
     'microtick': ['Uint64', []],
+    'get_now': ['Uint64', []],
     'poll_mouse_x': ['int', []],
     'poll_mouse_y': ['int', []],
     'poll_mouse_clicks': ['int', []],
@@ -25,7 +26,7 @@ const dll = ffi.Library(
     'set_size_graphical': ['void', ['int', 'int']],
     'screen_draw_cursor': ['void', ['int', 'int', 'int', 'Uint8*']],
     'screen_put_char': ['void', ['int', 'int', 'int', 'Uint16*', 'Uint8*', 'Uint8*']],
-    'screen_graphic_output': ['void', ['char*', 'int', 'int', 'int', 'int']],
+    'screen_graphic_output': ['void', ['char*', 'int', 'int'/*, 'int', 'int'*/, 'int', 'int']],
     'set_size_text': ['void', ['int', 'int']],
     'poll_events': ['int', []],
     // ACPI

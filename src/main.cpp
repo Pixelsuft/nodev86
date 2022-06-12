@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <chrono>
 #include <sys/time.h>
 #include <extern_api.h>
 #include <scancode.h>
@@ -64,6 +65,10 @@ V86_API uint64_t microtick() {
   if (!base_time)
     base_time = hi;
   return hi - base_time;
+}
+
+V86_API uint64_t get_now() {
+  return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 }
 
 V86_API void destroy() {
@@ -312,7 +317,7 @@ V86_API void screen_put_char(int _x, int _y, int _w, Uint16* _char, uint8_t* _bg
   SDL_DestroyTexture(_tex);
 }
 
-V86_API void screen_graphic_output(void* _data, int _x, int _y, int _width, int _height) {
+V86_API void screen_graphic_output(void* _data, int _x, int _y/*, int _bx, int _by*/, int _width, int _height) {
   // This code for VBE, VGA has _y = 0
   // Trick is not working with win9x logo
   int _max_y = _y + _height;
@@ -334,10 +339,10 @@ V86_API void screen_graphic_output(void* _data, int _x, int _y, int _width, int 
   );
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
   /*SDL_Rect debug_rect = {
-    _buffer_x,
-    _buffer_y,
+    _bx,
+    _by,
     _width,
-    _max_y
+    _height
   };
   SDL_RenderDrawRect(renderer, &debug_rect);*/
   SDL_DestroyTexture(_tex);

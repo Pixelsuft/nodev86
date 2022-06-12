@@ -42,6 +42,9 @@ if (!c['disable_microtick_hook']) {
     };
   }
 }
+if (!c['disable_now_hook']) {
+  Date.now = dll.get_now;
+}
 const v86 = require('./build/libv86');
 
 // Tricky fixed TODO
@@ -164,6 +167,8 @@ e.bus.register("screen-fill-buffer-end", function(data) {
       layer.image_data.data,
       layer.screen_x,
       layer.screen_y,
+      /*layer.buffer_x,
+      layer.buffer_y,*/
       layer.buffer_width,
       layer.buffer_height
     );
@@ -345,7 +350,9 @@ function tick() {
     e.save_state(async function(err, s) {
       if (err)
         throw err;
-      const blob = new Blob([s], {type: 'application/octet-stream'});
+      const blob = new Blob([s], {
+        type: 'application/octet-stream'
+      });
       const buffer = Buffer.from(await blob.arrayBuffer());
       fs.writeFileSync(
         path.join(__dirname, 'states', (process.argv.length > 2 ? process.argv[2] : 'default') + '.bin'),

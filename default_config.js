@@ -31,6 +31,7 @@ const config = {
   'speaker': true, // Beta, But works
   'custom_acpi': false, // Requires default ACPI, works bad with Windows 7
   'disable_microtick_hook': false, // Set true if win 7 logo doesn't appear
+  'disable_now_hook': false, // Set true if win 7 logo doesn't appear
   'char_size': [9, 16],
   'font_size': 15,
   'charmap': 'default',
@@ -40,8 +41,6 @@ const config = {
   'console_text_mode': true,
   'console_serial_mode': false
 };
-
-// TODO: Parse Configs
 
 exports.v86_c = v86_config;
 exports.c = config;
