@@ -27,6 +27,17 @@ uint64_t cmos_last_called,
   cmos_last_second_update,
   cmos_start_time;
 
+V86_API void cmos_set(uint8_t where, uint8_t data)
+{
+    cout << "cmos_set " << (int)where << " " << (int)data << endl;
+    cmos_ram[where] = data;
+}
+
+V86_API uint8_t cmos_get(uint8_t where)
+{
+    return cmos_ram[where];
+}
+
 V86_API int cmos_get_raise() {
   return cmos_last_raise;
 }
@@ -156,7 +167,7 @@ V86_API void cmos_ram_write(uint8_t data)
     case 1:
     case 3:
     case 5:
-        cmos_ram[cmos_addr] = data;
+        cmos_set(cmos_addr, data);
         break;
     case 0:
         now->tm_sec = bcd(data);
@@ -255,16 +266,6 @@ V86_API int cmos_next(uint64_t now)
 {
     cmos_clock(now);
     return cmos_last_called + cmos_period - now;
-}
-
-V86_API void cmos_set(uint8_t where, uint8_t data)
-{
-    cmos_ram[where] = data;
-}
-
-V86_API uint8_t cmos_get(uint8_t where)
-{
-    return cmos_ram[where];
 }
 
 V86_API void cmos_init(uint64_t now)
