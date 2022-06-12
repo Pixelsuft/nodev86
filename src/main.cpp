@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <math.h>
 #include <sys/time.h>
 #include <extern_api.h>
 #include <scancode.h>
@@ -37,6 +38,7 @@ int char_count[2] = { 80, 25 };
 int screen_size_text[2] = { char_count[0] * char_size[0], char_count[1] * char_size[1] };
 int screen_size_graphical[2] = { 320, 200 };
 bool is_loading = false;
+bool should_center = true;
 
 const string format_title() {
   string result("nodev86 [");
@@ -56,6 +58,40 @@ const string format_title() {
 
 void update_title() {
   SDL_SetWindowTitle(window, format_title().data());
+}
+
+void update_should_center() {
+  int window_x, window_y, need_x, need_y, window_w, window_h, screen_w, screen_h;
+  SDL_GetWindowPosition(window, &window_x, &window_y);
+  SDL_GetWindowSize(window, &window_w, &window_h);
+  SDL_DisplayMode dm;
+  if (window_x == 0 || window_y == 0 || SDL_GetCurrentDisplayMode(0, &dm) != 0) {
+    should_center = false;
+    return;
+  }
+  if ((window_x < 0 || window_y < 0) && should_center) {
+    return;
+  }
+  screen_w = dm.w;
+  screen_h = dm.h;
+  need_x = round((float)screen_w / 2.0f - (float)window_w / 2.0f);
+  need_y = round((float)screen_h / 2.0f - (float)window_h / 2.0f);
+  should_center = window_x == need_x && window_y == need_y;
+}
+
+void update_center() {
+  if (!should_center)
+    return;
+  int need_x, need_y, window_w, window_h, screen_w, screen_h;
+  SDL_GetWindowSize(window, &window_w, &window_h);
+  SDL_DisplayMode dm;
+  if (SDL_GetCurrentDisplayMode(0, &dm) != 0)
+    return;
+  screen_w = dm.w;
+  screen_h = dm.h;
+  need_x = round((float)screen_w / 2.0f - (float)window_w / 2.0f);
+  need_y = round((float)screen_h / 2.0f - (float)window_h / 2.0f);
+  SDL_SetWindowPosition(window, need_x, need_y);
 }
 
 V86_API uint64_t microtick() {
@@ -257,10 +293,12 @@ V86_API void clear_screen() {
 
 V86_API void set_graphical(bool _is_graphical) {
   is_graphical = _is_graphical;
+  update_should_center();
   if (is_graphical)
     SDL_SetWindowSize(window, screen_size_graphical[0], screen_size_graphical[1]);
   else
     SDL_SetWindowSize(window, screen_size_text[0], screen_size_text[1]);
+  update_center();
   update_title();
 }
 
@@ -269,16 +307,22 @@ V86_API void set_size_text(int _x_chars, int _y_chars) {
   char_count[1] = _y_chars;
   screen_size_text[0] = _x_chars * char_size[0];
   screen_size_text[1] = _y_chars * char_size[1];
-  if (!is_graphical)
+  if (!is_graphical) {
+    update_should_center();
     SDL_SetWindowSize(window, screen_size_text[0], screen_size_text[1]);
+    update_center();
+  }
   update_title();
 }
 
 V86_API void set_size_graphical(int _width, int _height) {
   screen_size_graphical[0] = _width;
   screen_size_graphical[1] = _height;
-  if (is_graphical)
+  if (is_graphical) {
+    update_should_center();
     SDL_SetWindowSize(window, screen_size_graphical[0], screen_size_graphical[1]);
+    update_center();
+  }
   update_title();
 }
 
