@@ -42,7 +42,20 @@ const dll = ffi.Library(
     'acpi_get_state': ['Uint16*', []],
     'acpi_set_state': ['void', ['Uint16*']],
     // RTC
-    'rtc_get_now': ['Uint64', []]
+    'cmos_init': ['void', ['Uint64']],
+    'cmos_get_now': ['Uint64', []],
+    'cmos_ram_read': ['Uint8', ['Uint8']],
+    'cmos_readb_70': ['Uint32', []],
+    'cmos_readb_71': ['Uint32', []],
+    'cmos_update_timer': ['void', []],
+    'cmos_ram_write': ['void', ['Uint8']],
+    'cmos_writeb_70': ['void', ['Uint32']],
+    'cmos_writeb_71': ['void', ['Uint32']],
+    'cmos_next': ['int', ['Uint64']],
+    'cmos_set': ['void', ['Uint8', 'Uint8']],
+    'cmos_get': ['Uint8', ['Uint8']],
+    'cmos_should_lower': ['bool', []],
+    'cmos_get_raise': ['int', []]
   }
 );
 
