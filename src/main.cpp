@@ -17,7 +17,6 @@
 
 using namespace std;
 
-
 int char_size[2] = { 9, 16 };
 int font_size = 15;
 bool anti_aliassing = false;

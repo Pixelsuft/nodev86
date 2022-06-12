@@ -41,6 +41,8 @@ const dll = ffi.Library(
     'acpi_get_result': ['int', []],
     'acpi_get_state': ['Uint16*', []],
     'acpi_set_state': ['void', ['Uint16*']],
+    // RTC
+    'rtc_get_now': ['Uint64', []]
   }
 );
 
