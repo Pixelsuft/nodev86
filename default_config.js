@@ -28,8 +28,8 @@ const v86_config = {
 const config = {
   'hardware_accel': true,
   'mouse_sens': 0.15 * 2,
-  'speaker': true, // Beta, But works
-  'custom_rtc': false,
+  'speaker': true, // A little bit laggy
+  'custom_rtc': false, // Will require patch to pass custom RTC as default
   'custom_acpi': false, // Requires default ACPI, works bad with Windows 7
   'disable_microtick_hook': false, // Set true if win 7 logo doesn't appear
   'disable_now_hook': false, // Set true if win 7 logo doesn't appear
