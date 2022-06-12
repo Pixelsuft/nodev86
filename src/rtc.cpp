@@ -34,7 +34,6 @@ V86_API void cmos_set(uint8_t where, uint8_t data)
 
 V86_API uint8_t cmos_get(uint8_t where)
 {
-    //cout << (int)where << " " << (int)cmos_ram[where] << endl;
     return cmos_ram[where];
 }
 
@@ -108,7 +107,6 @@ V86_API uint8_t cmos_ram_read(uint8_t addr)
     case 0x0B:
         return cmos_ram[cmos_addr];
     case 0x0C: {
-        cout << "should lower" << endl;
         int res = cmos_ram[0x0C];
         cmos_ram[0x0C] = 0;
         return res;
@@ -125,7 +123,6 @@ V86_API uint32_t cmos_readb_70() {
 }
 
 V86_API uint32_t cmos_readb_71() {
-  cout << "ram read " << (int)cmos_addr << endl;
   if (cmos_addr <= 0x0D)
       return cmos_ram_read(cmos_addr);
   else

@@ -5,8 +5,6 @@ const {
 function RTC(cpu) {
   this.cpu = cpu;
 
-  dll.cmos_init(0);
-
   cpu.io.register_read(0x70, this, dll.cmos_readb_70);
   cpu.io.register_read(0x71, this, function() {
     if (dll.cmos_should_lower())
@@ -16,6 +14,8 @@ function RTC(cpu) {
 
   cpu.io.register_write(0x70, this, dll.cmos_writeb_70);
   cpu.io.register_write(0x71, this, dll.cmos_writeb_71);
+
+  dll.cmos_init(0);
 }
 
 RTC.prototype.get_state = function() {
