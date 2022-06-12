@@ -26,6 +26,9 @@ const {
 const {
   ACPI
 } = require('./acpi');
+const {
+  RTC
+} = require('./rtc');
 const AudioContext = require('web-audio-engine').StreamAudioContext;
 const Speaker = require('speaker');
 const fs = require('fs');
@@ -88,6 +91,10 @@ const e = new v86.V86Starter(v86_c);
 e.bus.register("emulator-ready", function() {
   if (c['custom_acpi']) {
     e.v86.cpu.devices.acpi = new ACPI(e.v86.cpu);
+  }
+  if (c['custom_rtc']) {
+    e.v86.cpu.devices.rtc = new RTC(e.v86.cpu);
+    e.v86.cpu.fill_cmos(e.v86.cpu.devices.rtc, v86_c);
   }
   if (c['speaker'])
     new SpeakerAdapter(e.bus);

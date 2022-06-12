@@ -29,6 +29,7 @@ const config = {
   'hardware_accel': true,
   'mouse_sens': 0.15 * 2,
   'speaker': true, // Beta, But works
+  'custom_rtc': false,
   'custom_acpi': false, // Requires default ACPI, works bad with Windows 7
   'disable_microtick_hook': false, // Set true if win 7 logo doesn't appear
   'disable_now_hook': false, // Set true if win 7 logo doesn't appear
