@@ -5,7 +5,7 @@ const {
 function RTC(cpu) {
   this.cpu = cpu;
 
-  cpu.io.register_write(0x70, this, dll.cmos_readb_70);
+  cpu.io.register_read(0x70, this, dll.cmos_readb_70);
   cpu.io.register_read(0x71, this, function() {
     if (dll.cmos_should_lower())
       this.cpu.device_lower_irq(8);
@@ -13,9 +13,9 @@ function RTC(cpu) {
   });
 
   cpu.io.register_write(0x71, this, dll.cmos_writeb_70);
-  cpu.io.register_read(0x71, this, dll.cmos_writeb_71);
+  cpu.io.register_write(0x71, this, dll.cmos_writeb_71);
 
-  cmos_init(0);
+  dll.cmos_init(0);
 }
 
 RTC.prototype.get_state = function() {
@@ -30,7 +30,7 @@ RTC.prototype.set_state = function(state) {
 };
 
 RTC.prototype.timer = function(time, legacy_mode) {
-  const result = dll.cmos_next(cmos_get_now());
+  const result = dll.cmos_next(dll.cmos_get_now());
   const to_raise = dll.cmos_get_raise();
   if (to_raise) {
     this.cpu.device_raise_irq(8);
