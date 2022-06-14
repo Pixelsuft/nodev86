@@ -113,6 +113,8 @@ e.bus.register("screen-set-mode", function(data) {
   dll.set_graphical(data);
 });
 e.bus.register("screen-set-size-graphical", function(data) {
+  data[0] = data[2];
+  data[1] = data[3];
   if (vga_mode_size[0] == data[0] && vga_mode_size[1] == data[1])
     return;
   vga_mode_size[0] = data[0];
