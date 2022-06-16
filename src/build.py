@@ -7,6 +7,7 @@ import subprocess
 
 bits, linkage = platform.architecture()
 is_windows = linkage == 'WindowsPE'
+use_subprocess = not os.getenv('USE_SYSTEM')
 cwd = os.path.dirname(__file__) or os.getcwd()
 os.chdir(cwd)
 
@@ -63,7 +64,7 @@ if is_windows:
     else:  # MSYS2
         sdl2_flags = sys.argv[1:]
         if not sdl2_flags:
-            print('Usage: python build.py $(sdl2-config --cflags --libs)')
+            print('Usage: python build.py $(sdl2-config --cflags --libs) -lSDL2_ttf')
             sys.exit(1)
         sdl2_flags.append('-lSDL2_ttf')
     sdl2_flags.append('-ldwmapi')
@@ -98,7 +99,7 @@ output_file = os.path.join(
 if os.path.isdir(output_file):
     os.remove(output_file)
 
-result = subprocess.call([
+compiler_flags = [
     compiler,
     *input_files,
     '-o',
@@ -108,7 +109,21 @@ result = subprocess.call([
     '-I',
     include_path,
     *sdl2_flags
-], shell=is_windows)
+]
+compiler_string = ''
+for compiler_flag in compiler_flags:
+    if compiler_string:
+        compiler_string += ' '
+    if ' ' in compiler_flag:
+        compiler_string += '"' + compiler_flag + '"'
+    else:
+        compiler_string += compiler_flag
+
+print(compiler_string)
+if use_subprocess:
+    result = subprocess.call(compiler_flags, shell=is_windows)
+else:
+    result = os.system(compiler_string)
 if result:
     print(f'[{hex(result)}] Failed to compile code!')
     sys.exit(1)
