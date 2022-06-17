@@ -241,8 +241,7 @@ function console_text_update_row(row) {
     }
     closer_color_bg(number_as_color(bg_color));
   }
-  text += set_cursor_pos(cursor_pos[1] + 1, cursor_pos[0] + 1);
-  process.stdout.write(text);
+  return text;
 };
 
 function text_update_row(row) {
@@ -281,9 +280,11 @@ function text_update_row(row) {
 }
 
 function update_text_rows() {
+  var console_text = '';
   for (var i = 0; i < text_mode_size[1]; i++) {
     if (changed_rows[i]) {
-      if (use_console) console_text_update_row(i);
+      if (use_console)
+        console_text += console_text_update_row(i);
       if (text_mode) {
         text_update_row(i);
         if (enable_cursor && i == cursor_pos[0]) {
@@ -297,6 +298,10 @@ function update_text_rows() {
       }
       changed_rows[i] = 0;
     }
+  }
+  if (use_console) {
+    console_text += set_cursor_pos(cursor_pos[1] + 1, cursor_pos[0] + 1);
+    process.stdout.write(console_text);
   }
 }
 
