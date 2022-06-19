@@ -31,6 +31,7 @@ const config = {
   'speaker': true, // A little bit laggy
   'custom_rtc': false, // Will require patch to pass custom RTC as default
   'custom_acpi': false, // Requires default ACPI, works bad with Windows 7
+  'custom_acpi_accurate': false,
   'disable_microtick_hook': false, // Set true if win 7 logo doesn't appear
   'disable_now_hook': false, // Set true if win 7 logo doesn't appear
   'char_size': [9, 16],

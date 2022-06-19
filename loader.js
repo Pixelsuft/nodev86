@@ -41,6 +41,7 @@ const dll = ffi.Library(
     'acpi_get_result': ['int', []],
     'acpi_get_state': ['Uint16*', []],
     'acpi_set_state': ['void', ['Uint16*']],
+    'acpi_enable_accurate': ['void', []],
     // RTC
     'cmos_init': ['void', ['Uint64']],
     'cmos_get_now': ['Uint64', []],

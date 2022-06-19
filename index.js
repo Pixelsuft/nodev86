@@ -94,6 +94,8 @@ const e = new v86.V86Starter(v86_c);
 
 e.bus.register("emulator-ready", function() {
   if (c['custom_acpi']) {
+    if (c['custom_acpi_accurate'])
+      dll.acpi_enable_accurate();
     e.v86.cpu.devices.acpi = new ACPI(e.v86.cpu);
   }
   if (c['speaker'])

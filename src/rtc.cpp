@@ -27,13 +27,11 @@ uint64_t cmos_last_called,
   cmos_last_second_update,
   cmos_start_time;
 
-V86_API void cmos_set(uint8_t where, uint8_t data)
-{
+V86_API void cmos_set(uint8_t where, uint8_t data) {
     cmos_ram[where] = data;
 }
 
-V86_API uint8_t cmos_get(uint8_t where)
-{
+V86_API uint8_t cmos_get(uint8_t where) {
     return cmos_ram[where];
 }
 

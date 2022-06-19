@@ -22,6 +22,12 @@ uint16_t acpi_state[7];
 uint32_t acpi_timer_last_value = 0;
 uint32_t acpi_timer_imprecision_offset = 0;
 
+bool acpi_accurate = false;
+
+V86_API void acpi_enable_accurate() {
+  acpi_accurate = true;
+}
+
 V86_API uint16_t* acpi_get_state() {
   acpi_state[0] = acpi_status;
   acpi_state[1] = acpi_pm1_status;
@@ -54,6 +60,8 @@ V86_API uint64_t acpi_microtick() {
 
 V86_API uint32_t acpi_get_timer(uint64_t now) {
   uint32_t t = round((double)now * (double)PMTIMER_FREQ_SECONDS / (double)1000000);
+  if (!acpi_accurate)
+    return t;
   if (t == acpi_timer_last_value) {
     if (acpi_timer_imprecision_offset < (uint32_t)PMTIMER_FREQ_SECONDS / (uint32_t)1000000) {
       acpi_timer_imprecision_offset++;
