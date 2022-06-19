@@ -27,6 +27,7 @@ const v86_config = {
 
 const config = {
   'hardware_accel': true,
+  'vsync': true,
   'mouse_sens': 0.15 * 2,
   'speaker': true, // A little bit laggy
   'custom_rtc': false, // Will require patch to pass custom RTC as default
