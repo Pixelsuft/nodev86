@@ -274,7 +274,7 @@ function text_update_row(row) {
       i - text.length,
       row,
       text.length,
-      str_to_utf16(text + '\x00'),
+      encoder.encode(text + '\x00'),
       new Uint8Array(number_as_color(bg_color)),
       new Uint8Array(number_as_color(fg_color))
     );
