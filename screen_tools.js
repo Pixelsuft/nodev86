@@ -92,17 +92,8 @@ function number_as_color(n) {
   ];
 }
 
-function str_to_utf16(str) {
-  var arr = new Uint16Array(str.length);
-  for (var i = 0; i < str.length; i++) {
-    arr[i] = str.charCodeAt(i);
-  }
-  return arr;
-}
-
 exports.update_charmap = update_charmap;
 exports.number_as_color = number_as_color;
 exports.closer_color_bg = closer_color_bg;
 exports.closer_color_fg = closer_color_fg;
 exports.set_cursor_pos = set_cursor_pos;
-exports.str_to_utf16 = str_to_utf16;

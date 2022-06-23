@@ -17,7 +17,6 @@ const {
   closer_color_bg,
   closer_color_fg,
   set_cursor_pos,
-  str_to_utf16,
   update_charmap
 } = require('./screen_tools');
 const {
