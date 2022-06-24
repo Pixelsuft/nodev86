@@ -1,7 +1,4 @@
 const {
-  ImageData
-} = require('canvas');
-const {
   dll
 } = require('./loader');
 const {
@@ -49,8 +46,10 @@ if (!c['disable_now_hook']) {
 }
 const v86 = require('./build/libv86');
 
-// Tricky fixed TODO
-global.ImageData = ImageData;
+global.ImageData = function(buffer) {
+  buffer.data = buffer;
+  return buffer;
+};
 if (c['speaker']) {
   global.AudioContext = AudioContext;
   global.OutputSpeaker = Speaker;
