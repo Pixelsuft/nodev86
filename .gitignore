@@ -1,7 +1,6 @@
 build
 configs
 external
-GTK
 node_modules
 states
 src/SDL2
