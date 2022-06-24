@@ -46,8 +46,10 @@ if (!c['disable_now_hook']) {
 }
 const v86 = require('./build/libv86');
 
-global.ImageData = function(buffer) {
+global.ImageData = function(buffer, width, height) {
   buffer.data = buffer;
+  buffer.virtual_width = width;
+  buffer.virtual_height = height;
   return buffer;
 };
 if (c['speaker']) {
