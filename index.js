@@ -25,8 +25,10 @@ const {
 const {
   RTC
 } = require('./rtc');
-const AudioContext = require('web-audio-engine').StreamAudioContext;
-const Speaker = require('speaker');
+if (c['speaker']) {
+  global.AudioContext = require('web-audio-engine').StreamAudioContext;
+  global.OutputSpeaker = require('speaker');
+}
 const fs = require('fs');
 const path = require('path');
 const defines = require('./defines');
@@ -52,10 +54,6 @@ global.ImageData = function(buffer, width, height) {
   buffer.virtual_height = height;
   return buffer;
 };
-if (c['speaker']) {
-  global.AudioContext = AudioContext;
-  global.OutputSpeaker = Speaker;
-}
 if (c['custom_rtc']) {
   // Will require patch
   global.CustomRTC = RTC;
