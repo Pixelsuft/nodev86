@@ -46,7 +46,9 @@ if (!c['disable_microtick_hook']) {
 if (!c['disable_now_hook']) {
   Date.now = dll.get_now;
 }
-const v86 = require('./build/libv86');
+const v86 = require(
+  './build/' + (c['lib'] || 'libv86')
+);
 
 global.ImageData = function(buffer, width, height) {
   buffer.data = buffer;
@@ -64,6 +66,7 @@ const mouse_sens = c['mouse_sens'];
 const text_mode = c['graphic_text_mode'];
 const use_console = c['console_text_mode'];
 const use_serial = c['console_serial_mode'];
+const legacy_vga = c['legacy_vga'];
 const charmap = update_charmap(custom_charmap.high, custom_charmap.low);
 const encoder = new TextEncoder();
 
@@ -76,6 +79,12 @@ var changed_rows = new Int8Array(25);
 var text_mode_data = new Int32Array(80 * 25 * 3);
 var cursor_height = Math.floor(char_size[1] / 16);
 var cursor_color = new Uint8Array([0xCC, 0xCC, 0xCC]);
+
+
+var // Legacy VGA
+  graphic_image_data,
+  graphic_buffer,
+  graphic_buffer32;
 
 dll.init(
   char_size[0],
@@ -117,8 +126,16 @@ e.bus.register("screen-set-size-graphical", function(data) {
   //data[1] = data[3];
   if (vga_mode_size[0] == data[0] && vga_mode_size[1] == data[1])
     return;
+  if (legacy_vga) {
+    graphic_image_data = new ImageData(new Uint8ClampedArray(data[2] * data[3] * 4), data[2], data[3]);
+    graphic_buffer = new Uint8Array(graphic_image_data.data.buffer);
+    graphic_buffer32 = new Int32Array(graphic_image_data.data.buffer);
+  }
   vga_mode_size[0] = data[0];
   vga_mode_size[1] = data[1];
+  if (legacy_vga) {
+    e.bus.send("screen-tell-buffer", [graphic_buffer32], [graphic_buffer32.buffer]);
+  }
   dll.set_size_graphical(vga_mode_size[0], vga_mode_size[1]);
 });
 e.bus.register("screen-set-size-text", function(data) {
@@ -173,7 +190,7 @@ e.bus.register("screen-fill-buffer-end", function(data) {
   // dll.clear_screen();
   data.forEach(layer => {
     dll.screen_graphic_output(
-      layer.image_data.data,
+      legacy_vga ? graphic_image_data.data : layer.image_data.data,
       layer.screen_x,
       layer.screen_y,
       /*layer.buffer_x,
