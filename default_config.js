@@ -27,6 +27,8 @@ const v86_config = {
 
 const config = {
   'hardware_accel': true,
+  'lib_file': 'libv86',
+  'legacy_vga': false,
   'vsync': true,
   'mouse_sens': 0.15 * 2,
   'speaker': true, // A little bit laggy

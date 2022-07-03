@@ -129,7 +129,7 @@ e.bus.register("screen-set-size-graphical", function(data) {
   if (legacy_vga) {
     graphic_image_data = new ImageData(new Uint8ClampedArray(data[2] * data[3] * 4), data[2], data[3]);
     graphic_buffer = new Uint8Array(graphic_image_data.data.buffer);
-    graphic_buffer32 = new Int32Array(graphic_image_data.data.buffer);
+    graphic_buffer32 = new Int32Array(data[2] * data[3] * 4);
   }
   vga_mode_size[0] = data[0];
   vga_mode_size[1] = data[1];
@@ -190,7 +190,7 @@ e.bus.register("screen-fill-buffer-end", function(data) {
   // dll.clear_screen();
   data.forEach(layer => {
     dll.screen_graphic_output(
-      legacy_vga ? graphic_image_data.data : layer.image_data.data,
+      legacy_vga ? graphic_buffer32 : layer.image_data.data,
       layer.screen_x,
       layer.screen_y,
       /*layer.buffer_x,
