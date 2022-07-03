@@ -190,7 +190,7 @@ e.bus.register("screen-fill-buffer-end", function(data) {
   // dll.clear_screen();
   data.forEach(layer => {
     dll.screen_graphic_output(
-      legacy_vga ? graphic_buffer32 : layer.image_data.data,
+      legacy_vga ? graphic_buffer : layer.image_data.data,
       layer.screen_x,
       layer.screen_y,
       /*layer.buffer_x,
