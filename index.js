@@ -83,7 +83,6 @@ var cursor_color = new Uint8Array([0xCC, 0xCC, 0xCC]);
 
 var // Legacy VGA
   graphic_image_data,
-  graphic_buffer,
   graphic_buffer32;
 
 dll.init(
@@ -126,14 +125,11 @@ e.bus.register("screen-set-size-graphical", function(data) {
   //data[1] = data[3];
   if (vga_mode_size[0] == data[0] && vga_mode_size[1] == data[1])
     return;
-  if (legacy_vga) {
-    graphic_image_data = new ImageData(new Uint8ClampedArray(data[2] * data[3] * 4), data[2], data[3]);
-    graphic_buffer = new Uint8Array(graphic_image_data.data.buffer);
-    graphic_buffer32 = new Int32Array(data[2] * data[3] * 4);
-  }
   vga_mode_size[0] = data[0];
   vga_mode_size[1] = data[1];
   if (legacy_vga) {
+    graphic_image_data = new ImageData(new Uint8ClampedArray(data[2] * data[3] * 4), data[2], data[3]);
+    graphic_buffer32 = new Int32Array(graphic_image_data.buffer);
     e.bus.send("screen-tell-buffer", [graphic_buffer32], [graphic_buffer32.buffer]);
   }
   dll.set_size_graphical(vga_mode_size[0], vga_mode_size[1]);
@@ -190,7 +186,7 @@ e.bus.register("screen-fill-buffer-end", function(data) {
   // dll.clear_screen();
   data.forEach(layer => {
     dll.screen_graphic_output(
-      legacy_vga ? graphic_buffer : layer.image_data.data,
+      legacy_vga ? graphic_image_data : layer.image_data.data,
       layer.screen_x,
       layer.screen_y,
       /*layer.buffer_x,
