@@ -76,6 +76,7 @@ const legacy_vga = c['legacy_vga'];
 const charmap = update_charmap(custom_charmap.high, custom_charmap.low);
 const encoder = new TextEncoder();
 
+var network_adapter;
 var is_graphical = false;
 var text_mode_size = [80, 25];
 var vga_mode_size = [0, 0];
@@ -113,7 +114,7 @@ e.bus.register("emulator-ready", function() {
   if (c['speaker'])
     new SpeakerAdapter(e.bus);
   if (v86_c['network_relay_url'])
-    new NetworkAdapter(v86_c['network_relay_url'], e.bus);
+    network_adapter = new NetworkAdapter(v86_c['network_relay_url'], e.bus);
   if (!v86_c['autostart'])
     e.bus.send("cpu-run");
 });
@@ -364,6 +365,7 @@ function tick() {
     e.bus.send("mouse-wheel", [dll.poll_wheel(), 0]);
   }
   if (sum & defines.QUIT) {
+	if (network_adapter) network_adapter.destroy();
     if (use_serial) process.stdin.pause();
     e.destroy();
     dll.destroy();
