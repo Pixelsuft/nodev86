@@ -23,11 +23,17 @@ const {
   ACPI
 } = require('./acpi');
 const {
+  NetworkAdapter
+} = require('./network');
+const {
   RTC
 } = require('./rtc');
 if (c['speaker']) {
   global.AudioContext = require('web-audio-engine').StreamAudioContext;
   global.OutputSpeaker = require('speaker');
+}
+if (v86_c['network_relay_url']) {
+  global.WebSocket = require('websocket').w3cwebsocket;
 }
 const fs = require('fs');
 const path = require('path');
@@ -106,6 +112,8 @@ e.bus.register("emulator-ready", function() {
   }
   if (c['speaker'])
     new SpeakerAdapter(e.bus);
+  if (v86_c['network_relay_url'])
+    new NetworkAdapter(v86_c['network_relay_url'], e.bus);
   if (!v86_c['autostart'])
     e.bus.send("cpu-run");
 });
