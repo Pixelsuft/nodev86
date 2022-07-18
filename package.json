@@ -28,7 +28,6 @@
     "ffi-napi": "^4.0.3",
     "speaker": "^0.5.4",
     "web-audio-engine": "^0.13.4",
-    "websocket": "^1.0.34",
-    "websockets": "^0.2.0"
+    "websocket": "^1.0.34"
   }
 }
